@@ -57,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = DefaultConfig.kotlinCompilerExtensionVersion
@@ -73,6 +74,10 @@ android {
 }
 
 dependencies {
+    implementation(project(Modules.core))
+    implementation(project(Modules.libs))
+    implementation(project(Modules.features))
+
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycleRuntimeKtx)
     implementation(Dependencies.activityCompose)
@@ -101,10 +106,6 @@ dependencies {
     implementation(Dependencies.moshiConverter)
     //Timber
     implementation(Dependencies.timber)
-
-
-
-
 
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.junitExt)

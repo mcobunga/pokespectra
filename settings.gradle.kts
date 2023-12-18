@@ -15,3 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "PokeSpectra"
 include(":pokespectra")
+include(":core")
+include(":libs")
+include(":features")
