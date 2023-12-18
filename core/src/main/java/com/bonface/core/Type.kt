@@ -1,4 +1,4 @@
-package com.bonface.pokespectra.ui.theme
+package com.bonface.core
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

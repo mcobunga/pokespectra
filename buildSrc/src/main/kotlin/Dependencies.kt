@@ -14,7 +14,6 @@ object Versions {
     const val moshi = "1.15.0"
     const val moshiConverter = "2.9.0"
     const val timber = "5.0.1"
-
     const val junit = "4.13.2"
     const val junitExt = "1.1.5"
     const val espressoCore = "3.5.1"
@@ -51,20 +50,10 @@ object Dependencies {
     const val moshi = "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
     const val moshiKsp = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
     const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.moshiConverter}"
-
     //Timber
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     const val junit = "junit:junit:${Versions.junit}"
     const val junitExt = "androidx.test.ext:${Versions.junitExt}"
