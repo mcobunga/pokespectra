@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OM_Pokemon"
-include(":app")
+rootProject.name = "PokeSpectra"
+include(":pokespectra")

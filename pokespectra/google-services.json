@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "285601166701",
+    "project_id": "pokespectra-f5e76",
+    "storage_bucket": "pokespectra-f5e76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285601166701:android:15a53c9a43f7f131205664",
+        "android_client_info": {
+          "package_name": "com.bonface.pokespectra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs2lnp-XLY0bGxwvAlwajnNsah2VzjeMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
