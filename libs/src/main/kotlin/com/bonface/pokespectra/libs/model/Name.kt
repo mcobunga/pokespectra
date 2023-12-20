@@ -1,6 +1,7 @@
-package com.bonface.libs.model
+package com.bonface.pokespectra.libs.model
 
 import androidx.annotation.Keep
+import com.bonface.pokespectra.libs.model.Language
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

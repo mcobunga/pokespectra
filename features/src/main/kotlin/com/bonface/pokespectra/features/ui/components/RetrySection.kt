@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bonface.pokespectra.core.lightScrim
 import com.bonface.pokespectra.features.R
 
 @Composable
@@ -26,7 +27,7 @@ fun RetrySection(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(error, color = Color.Red, fontSize = 18.sp)
+        Text(error, color = lightScrim, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = { onRetry() },
