@@ -18,7 +18,19 @@ object Versions {
     const val junitExt = "1.1.5"
     const val espressoCore = "3.5.1"
     const val testComposeBom = "2023.08.00"
-    // Add other dependency versions
+    const val material = "1.0.1"
+    const val materialGoogle = "1.4.0"
+    const val materialIcons = "1.0.5"
+    const val materialIconsExt = "1.0.5"
+    const val composeLifecycle = "2.6.2"
+    const val coroutineCore = "1.4.3"
+    const val coroutinesAndroid = "1.4.3"
+    const val lifecycleViewmodel = "2.4.0"
+    const val lifecycleRuntime = "2.4.0"
+    const val composeNavigation = "2.7.5"
+    const val coilCompose = "2.4.0"
+    const val hiltViewModel = "1.0.0-alpha03"
+    const val hiltNavigation = "1.1.0"
 }
 
 object Dependencies {
@@ -27,11 +39,24 @@ object Dependencies {
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRuntimeKtx}"
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
     const val composeBom = "androidx.compose:compose-bom:${Versions.composeBom}"
-
     const val composeUi = "androidx.compose.ui:ui"
     const val composeUiGraphics = "androidx.compose.ui:ui-graphics"
     const val composeUiPreview = "androidx.compose.ui:ui-tooling-preview"
     const val material3 = "androidx.compose.material3:material3"
+    const val material = "androidx.compose.material:material:${Versions.material}"
+    const val materialGoogle = "com.google.android.material:material:${Versions.materialGoogle}"
+    const val materialIcons = "androidx.compose.material:material-icons-core:${Versions.materialIcons}"
+    const val materialIconsExt = "androidx.compose.material:material-icons-extended:${Versions.materialIconsExt}"
+    //Coroutines
+    const val coroutineCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineCore}"
+    const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesAndroid}"
+    // Coroutine Lifecycle Scopes
+    const val lifecycleViewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleViewmodel}"
+    const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleRuntime}"
+    //Navigation
+    const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
+    //composeLifecycle
+    const val composeLifecycle = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeLifecycle}"
     //Firebase crashlytics
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:${Versions.firebaseCrashlytics}"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics:${Versions.firebaseAnalytics}"
@@ -52,9 +77,14 @@ object Dependencies {
     const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.moshiConverter}"
     //Timber
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
-    
+    //Coil
+    const val coilCompose = "io.coil-kt:coil-compose:${Versions.coilCompose}"
+    //Hilt
+    const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltViewModel}"
+    const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}"
 
-    
+
+
     const val junit = "junit:junit:${Versions.junit}"
     const val junitExt = "androidx.test.ext:${Versions.junitExt}"
     const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
