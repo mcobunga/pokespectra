@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bonface.libs"
+    namespace = "com.bonface.pokespectra.libs"
     compileSdk = DefaultConfig.compileSdkVersion
 
     defaultConfig {
@@ -29,7 +29,7 @@ android {
         targetCompatibility = DefaultConfig.jvmVersion
     }
     kotlinOptions {
-        jvmTarget = DefaultConfig.jvmTarget
+        jvmTarget = DefaultConfig.jvmVersion.toString()
     }
     buildFeatures {
         buildConfig = true

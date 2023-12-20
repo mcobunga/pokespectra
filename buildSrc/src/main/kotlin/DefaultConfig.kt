@@ -7,7 +7,6 @@ object DefaultConfig {
     const val targetSdkVersion = compileSdkVersion
     const val versionCode = 1
     const val versionName = "1.0"
-    const val jvmTarget = "17"
     const val kotlinCompilerExtensionVersion = "1.5.5"
     const val appNameRelease = "PokeSpectra"
     const val appNameStaging = "PokeSpectraBeta"

@@ -53,7 +53,7 @@ android {
         targetCompatibility = DefaultConfig.jvmVersion
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = DefaultConfig.jvmVersion.toString()
     }
     buildFeatures {
         compose = true
@@ -75,7 +75,6 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
-    implementation(project(Modules.libs))
     implementation(project(Modules.features))
 
     implementation(Dependencies.coreKtx)
@@ -86,6 +85,10 @@ dependencies {
     implementation(Dependencies.composeUiGraphics)
     implementation(Dependencies.composeUiPreview)
     implementation(Dependencies.material3)
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
     //Firebase crashlytics
     implementation(Dependencies.firebaseCrashlytics)
     implementation(Dependencies.firebaseAnalytics)

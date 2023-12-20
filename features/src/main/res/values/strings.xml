@@ -1,0 +1,19 @@
+<resources>
+    <!--  Error responses  -->
+    <string name="no_internet_connection">No internet connection, try again</string>
+    <string name="app_update_needed">You need to update the app and try again</string>
+    <string name="problem_processing_request">There was a problem processing your request. Please try again</string>
+    <string name="unable_to_connect">Network is unreachable, check your connection</string>
+    <string name="internal_server_error">Internal server error, try again later.</string>
+    <string name="service_unavailable">Service temporarily unavailable, try again later</string>
+    <string name="no_server_response">There was a problem completing your request. Try again later.</string>
+
+    <string name="title_home">Pokemon</string>
+    <string name="search_placeholder">Search pokemon…</string>
+    <string name="icn_search_content_description">Search icon</string>
+    <string name="pokemon_image_desc">Pokemon image</string>
+    <string name="retry">Retry</string>
+    <string name="error_text">Something went wrong. Please try again.</string>
+    <string name="empty_pokemon">No Pokemon could be found</string>
+
+</resources>
