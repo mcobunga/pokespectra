@@ -1,7 +1,8 @@
-package com.bonface.libs.api
+package com.bonface.pokespectra.libs.api
 
-import com.bonface.pokespectra.libs.model.Pokemon
+import com.bonface.pokespectra.libs.model.DetailedPokedexResponse
 import com.bonface.pokespectra.libs.model.PokemonResponse
+import com.bonface.pokespectra.libs.model.PokemonSpeciesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,5 +17,8 @@ interface PokemonApiService {
     ): Response<PokemonResponse>
 
     @GET("pokemon/{id}")
-    suspend fun getPokemonDetails(@Path("id") id: Int): Response<Pokemon>
+    suspend fun getPokemonDetails(@Path("id") id: Int): Response<DetailedPokedexResponse>
+
+    @GET("pokemon-species/{id}")
+    suspend fun getPokemonSpeciesDetails(@Path("id") id: Int): Response<PokemonSpeciesResponse>
 }

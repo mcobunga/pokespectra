@@ -1,7 +1,7 @@
 package com.bonface.pokespectra.libs.di
 
 import android.os.Environment
-import com.bonface.libs.api.PokemonApiService
+import com.bonface.pokespectra.libs.api.PokemonApiService
 import com.bonface.libs.utils.Constants.BASE_URL
 import com.bonface.pokespectra.libs.BuildConfig
 import com.squareup.moshi.Moshi

@@ -31,7 +31,7 @@ class PokemonViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = pokemonRepository.getPokemon()
-                _pokemon.value = (handleResponse(result))
+                _pokemon.value = handleResponse(result)
             } catch (e: Exception) {
                 e.printStackTrace()
                 val error = ErrorHandler.handleException(e)

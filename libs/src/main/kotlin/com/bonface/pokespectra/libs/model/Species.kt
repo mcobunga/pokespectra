@@ -1,4 +1,4 @@
-package com.bonface.libs.model
+package com.bonface.pokespectra.libs.model
 
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class Version(
+data class Species(
     @Json(name = "name")
     val name: String,
     @Json(name = "url")

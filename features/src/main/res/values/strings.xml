@@ -15,5 +15,6 @@
     <string name="retry">Retry</string>
     <string name="error_text">Something went wrong. Please try again.</string>
     <string name="empty_pokemon">No Pokemon could be found</string>
+    <string name="back">Back button</string>
 
 </resources>
