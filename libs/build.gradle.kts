@@ -54,6 +54,4 @@ dependencies {
     implementation(Dependencies.timber)
 
     testImplementation(Dependencies.junit)
-    androidTestImplementation(Dependencies.junitExt)
-    androidTestImplementation(Dependencies.espressoCore)
 }
