@@ -76,19 +76,12 @@ android {
 dependencies {
     implementation(project(Modules.core))
     implementation(project(Modules.features))
-
     implementation(Dependencies.coreKtx)
-    implementation(Dependencies.lifecycleRuntimeKtx)
-    implementation(Dependencies.activityCompose)
     implementation(platform(Dependencies.composeBom))
     implementation(Dependencies.composeUi)
-    implementation(Dependencies.composeUiGraphics)
-    implementation(Dependencies.composeUiPreview)
     implementation(Dependencies.material3)
-
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-
+    implementation(Dependencies.composeNavigation)
     //Firebase crashlytics
     implementation(Dependencies.firebaseCrashlytics)
     implementation(Dependencies.firebaseAnalytics)
@@ -97,21 +90,12 @@ dependencies {
     //Dagger Hilt
     implementation(Dependencies.daggerHilt)
     ksp(Dependencies.daggerHiltKsp)
-    //Retrofit
-    implementation(Dependencies.retrofit)
-    //OKHTTP
-    implementation(Dependencies.okhttp)
-    //Logging Interceptor
-    implementation(Dependencies.loggingInterceptor)
-    //Moshi
-    implementation(Dependencies.moshi)
-    ksp(Dependencies.moshiKsp)
-    implementation(Dependencies.moshiConverter)
     //Timber
     implementation(Dependencies.timber)
 
     testImplementation(Dependencies.junit)
-    androidTestImplementation(Dependencies.junitExt)
+    implementation(Dependencies.junitKtx)
+    androidTestImplementation(Dependencies.androidTestExt)
     androidTestImplementation(Dependencies.espressoCore)
     androidTestImplementation(platform(Dependencies.testComposeBom))
     androidTestImplementation(Dependencies.uiTestJunit4)
