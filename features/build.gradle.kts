@@ -5,8 +5,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -67,25 +65,12 @@ dependencies {
     implementation(Dependencies.lifecycleRuntime)
     //Navigation
     implementation(Dependencies.composeNavigation)
-    //Firebase crashlytics
-    implementation(Dependencies.firebaseCrashlytics)
-    implementation(Dependencies.firebaseAnalytics)
-    implementation(Dependencies.hiltNavigation)
-    //Splash Screen
-    implementation(Dependencies.splash)
     //Dagger Hilt
     implementation(Dependencies.daggerHilt)
+    implementation(Dependencies.hiltNavigation)
     ksp(Dependencies.daggerHiltKsp)
     //Retrofit
     implementation(Dependencies.retrofit)
-    //OKHTTP
-    implementation(Dependencies.okhttp)
-    //Logging Interceptor
-    implementation(Dependencies.loggingInterceptor)
-    //Moshi
-    implementation(Dependencies.moshi)
-    ksp(Dependencies.moshiKsp)
-    implementation(Dependencies.moshiConverter)
     //Timber
     implementation(Dependencies.timber)
     //Coil for Image loading
