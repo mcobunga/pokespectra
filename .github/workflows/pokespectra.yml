@@ -1,0 +1,83 @@
+name: pokespectra_build
+
+env:
+  main_project_module: pokespectra
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  pokespectra:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set repository name as env variable
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Run unit tests
+        run: ./gradlew test --stacktrace
+
+      - name: Upload Test Reports Folder
+        uses: actions/upload-artifact@v2
+        if: ${{ always() }} # Upload reports regardless of status
+        with:
+            name: index.html
+            path: app/build/reports/tests/testDebugUnitTest/index.html # path to where the xml test results are stored
+
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
+
+      - name: Build gradle project
+        run: ./gradlew build
+
+      - name: Build apk debug project
+        run: ./gradlew assembleDebug
+
+      - name: Build apk release project
+        run: ./gradlew assemble
+
+      - name: Build app bundle release
+        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
+
+      - name: Upload APK Debug
+        uses: actions/upload-artifact@v3
+        with:
+          name: "pokespectra_debug_apk"
+          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
+
+
+      - name: Upload APK Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: "pokespectra_release_apk"
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
+
+
+      - name: Upload AAB Release
+        uses: actions/upload-artifact@v3
+        with:
+           name: "pokespectra_release_aab"
+           path: ${{ env.main_project_module }}/build/outputs/bundle/release/
