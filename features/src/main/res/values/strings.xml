@@ -10,7 +10,6 @@
 
     <string name="title_home">Pokemon</string>
     <string name="search_placeholder">Search pokemon…</string>
-    <string name="icn_search_content_description">Search icon</string>
     <string name="pokemon_image_desc">Pokemon image</string>
     <string name="retry">Retry</string>
     <string name="error_text">Something went wrong. Please try again.</string>
