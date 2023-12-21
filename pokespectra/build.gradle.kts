@@ -94,7 +94,8 @@ dependencies {
     implementation(Dependencies.timber)
 
     testImplementation(Dependencies.junit)
-    androidTestImplementation(Dependencies.junitExt)
+    implementation(Dependencies.junitKtx)
+    androidTestImplementation(Dependencies.androidTestExt)
     androidTestImplementation(Dependencies.espressoCore)
     androidTestImplementation(platform(Dependencies.testComposeBom))
     androidTestImplementation(Dependencies.uiTestJunit4)

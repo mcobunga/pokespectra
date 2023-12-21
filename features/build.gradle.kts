@@ -77,7 +77,8 @@ dependencies {
     implementation(Dependencies.coilCompose)
 
     testImplementation(Dependencies.junit)
-    androidTestImplementation(Dependencies.junitExt)
+    implementation(Dependencies.junitKtx)
+    androidTestImplementation(Dependencies.androidTestExt)
     androidTestImplementation(Dependencies.espressoCore)
     androidTestImplementation(platform(Dependencies.testComposeBom))
     androidTestImplementation(Dependencies.uiTestJunit4)

@@ -83,10 +83,9 @@ object Dependencies {
     const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltViewModel}"
     const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigation}"
 
-
-
     const val junit = "junit:junit:${Versions.junit}"
-    const val junitExt = "androidx.test.ext:${Versions.junitExt}"
+    const val junitKtx = "androidx.test.ext:junit-ktx:${Versions.junitExt}"
+    const val androidTestExt = "androidx.test.ext:junit:${Versions.junitExt}"
     const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
     const val testComposeBom = "androidx.compose:compose-bom:${Versions.testComposeBom}"
     const val uiTestJunit4 = "androidx.compose.ui:ui-test-junit4"
