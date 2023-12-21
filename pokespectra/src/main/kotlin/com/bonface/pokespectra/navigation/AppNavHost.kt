@@ -22,7 +22,37 @@ fun PokeSpectraNavigation(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationItem.Home.route
     ) {
-        composable(NavigationItem.Home.route) {
+        composable(
+            route = NavigationItem.Home.route,
+            enterTransition = {
+                fadeIn(animationSpec = tween(500, easing = LinearEasing)) +
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(500, easing = EaseIn)
+                )
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(500, easing = LinearEasing)) +
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(500, easing = EaseOut)
+                )
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(500, easing = LinearEasing)) +
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(500, easing = EaseIn)
+                )
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(500, easing = LinearEasing)) +
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(500, easing = EaseOut)
+                )
+            }
+        ) {
             MainScreen(navigateToPokemonDetails = { pokemonId ->
                 navController.navigate("${NavigationItem.PokemonDetails.route}/$pokemonId")
             })
@@ -31,34 +61,37 @@ fun PokeSpectraNavigation(navController: NavHostController) {
             route = NavigationItem.PokemonDetails.route + "/{pokemonId}",
             arguments = listOf(navArgument("pokemonId") { type = NavType.IntType }),
             enterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        500, easing = LinearEasing
-                    )
-                ) + slideIntoContainer(
+                fadeIn(animationSpec = tween(500, easing = LinearEasing)) +
+                slideIntoContainer(
                     animationSpec = tween(500, easing = EaseIn),
                     towards = AnimatedContentTransitionScope.SlideDirection.Start
                 )
             },
             exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        500, easing = LinearEasing
-                    )
-                ) + slideOutOfContainer(
-                    animationSpec = tween(
-                        500, easing = EaseOut
-                    ),
+                fadeOut(animationSpec = tween(500, easing = LinearEasing)) +
+                slideOutOfContainer(
+                    animationSpec = tween(500, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start
+                )
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(500, easing = LinearEasing)) +
+                slideIntoContainer(
+                    animationSpec = tween(500, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.End
+                )
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(500, easing = LinearEasing)) +
+                slideOutOfContainer(
+                    animationSpec = tween(500, easing = EaseOut),
                     towards = AnimatedContentTransitionScope.SlideDirection.End
                 )
             }
         ) {
             val pokemonId = it.arguments?.getInt("pokemonId")
             if (pokemonId != null) {
-                PokemonDetailsScreen(
-                    navController = navController,
-                    pokemonId = pokemonId
-                )
+                PokemonDetailsScreen(navController = navController, pokemonId = pokemonId)
             }
         }
     }

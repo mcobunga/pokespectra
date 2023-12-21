@@ -17,4 +17,11 @@
     <string name="empty_pokemon">No Pokemon could be found</string>
     <string name="back">Back button</string>
 
+    <string name="about_pokemon">About %1$s</string>
+    <string name="pokemon_weight">Weight: <b>%1$s</b></string>
+    <string name="pokemon_height">Height: <b>%1$s</b></string>
+    <string name="pokemon_abilities">%1$s Abilities</string>
+    <string name="pokemon_stats">%1$s Stats</string>
+    <string name="stat_value">%1$s (%2$s)</string>
+
 </resources>

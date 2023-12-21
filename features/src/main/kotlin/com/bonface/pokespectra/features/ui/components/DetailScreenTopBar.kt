@@ -28,33 +28,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bonface.pokespectra.core.lightOnPrimary
 import com.bonface.pokespectra.core.lightOutline
 import com.bonface.pokespectra.core.lightPrimary
 import com.bonface.pokespectra.core.lightScrim
-import com.bonface.pokespectra.core.lightSurfaceTint
 import com.bonface.pokespectra.features.R
-import com.bonface.pokespectra.features.utils.TopAppBarStateProvider
+import com.bonface.pokespectra.features.utils.TopAppBarStateProvider.topAppBarState
 
 @Composable
-fun DetailScreenTopBar(onBackPress: () -> Unit, title: String) {
+fun DetailScreenTopBar(onBackPress: () -> Unit) {
     TopAppBar(
         navigationIcon = {
+            val iconTintColor = if (topAppBarState.color != null && topAppBarState.color == lightOnPrimary) lightOutline else lightOnPrimary
             OutlinedButton(onClick = onBackPress,
                 modifier= Modifier.size(36.dp),
                 shape = CircleShape,
-                border= BorderStroke(1.dp, lightOutline),
+                border= BorderStroke(1.dp, iconTintColor),
                 contentPadding = PaddingValues(0.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  lightOutline)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  iconTintColor)
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = stringResource(id = R.string.back),
-                    tint = lightSurfaceTint
+                    tint = iconTintColor
                 )
             }
         },
         title = {
-            TopAppBarStateProvider.topAppBarState.title?.let { title ->
+            topAppBarState.title?.let { title ->
                 Row(
                     Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically
@@ -71,14 +72,14 @@ fun DetailScreenTopBar(onBackPress: () -> Unit, title: String) {
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 text = title,
-                                color = lightScrim
+                                color = if (topAppBarState.color != null && topAppBarState.color == lightOnPrimary) lightScrim else lightOnPrimary
                             )
                         }
                     }
                 }
             }
         },
-        backgroundColor = lightPrimary,
+        backgroundColor = topAppBarState.color ?: lightPrimary,
         contentColor = lightScrim,
         elevation = 0.dp,
     )
@@ -87,5 +88,5 @@ fun DetailScreenTopBar(onBackPress: () -> Unit, title: String) {
 @Preview
 @Composable
 fun DetailScreenTopBarPreview() {
-    DetailScreenTopBar(onBackPress = {}, title = "Pokemon")
+    DetailScreenTopBar {}
 }
