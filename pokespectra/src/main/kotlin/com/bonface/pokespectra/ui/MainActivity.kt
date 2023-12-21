@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.bonface.pokespectra.core.PokeSpectraTheme
-import com.bonface.pokespectra.features.ui.home.PokemonViewModel
 import com.bonface.pokespectra.navigation.PokeSpectraNavigation
 import com.bonface.pokespectra.ui.viewmodel.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint

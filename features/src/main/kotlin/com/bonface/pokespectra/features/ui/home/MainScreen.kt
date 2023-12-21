@@ -54,9 +54,9 @@ import com.bonface.pokespectra.libs.utils.getPokemonImageUrl
 @Composable
 fun MainScreen(
     navigateToPokemonDetails: (Int) -> Unit,
-    viewModel: PokemonViewModel = hiltViewModel()
+    pokemonViewModel: PokemonViewModel = hiltViewModel()
 ) {
-    val pokemon by viewModel.pokemon.collectAsStateWithLifecycle()
+    val pokemon by pokemonViewModel.pokemon.collectAsStateWithLifecycle()
     var pokedexItems by remember { mutableStateOf(listOf<Pokedex>()) }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -80,7 +80,7 @@ fun MainScreen(
                 }
                 is Resource.Error -> {
                     RetrySection(error = pokemon.message.toString()) {
-                        viewModel.getPokemon()
+                        pokemonViewModel.getPokemon()
                     }
                 }
                 is Resource.Loading -> {
@@ -186,7 +186,7 @@ fun PokemonCard(navigateToDetails: (Int) -> Unit, pokedex: Pokedex, modifier: Mo
         )
     ) {
         Column(
-            modifier = modifier.clickable(onClick = {  })
+            modifier = modifier.clickable(onClick = { navigateToDetails(pokedex.pokemonId) })
                 .padding(16.dp)
                 .fillMaxWidth(),
             Arrangement.SpaceEvenly
