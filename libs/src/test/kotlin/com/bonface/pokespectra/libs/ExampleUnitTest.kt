@@ -1,4 +1,4 @@
-package com.bonface.libs
+package com.bonface.pokespectra.libs
 
 import org.junit.Test
 

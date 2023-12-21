@@ -52,4 +52,8 @@ dependencies {
     implementation(Dependencies.moshiConverter)
     //Timber
     implementation(Dependencies.timber)
+
+    testImplementation(Dependencies.junit)
+    androidTestImplementation(Dependencies.junitExt)
+    androidTestImplementation(Dependencies.espressoCore)
 }
