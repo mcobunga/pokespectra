@@ -4,11 +4,13 @@ package com.bonface.pokespectra.features.ui.home
 import com.bonface.pokespectra.libs.repository.PokemonRepository
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
+import com.bonface.pokespectra.utils.TestCreationUtils
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import net.bytebuddy.matcher.ElementMatchers.`is`
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -40,10 +42,6 @@ class PokemonViewModelTest: BaseTest() {
         super.afterEach()
         clearAllMocks()
     }
-
-
-
-
 
     @Test
     fun `should emit error object when api response error`() {
