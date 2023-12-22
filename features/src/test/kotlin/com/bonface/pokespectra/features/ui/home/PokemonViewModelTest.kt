@@ -6,11 +6,8 @@ import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
 import com.bonface.pokespectra.utils.TestCreationUtils.getPokemon
 import io.mockk.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -64,22 +61,22 @@ class PokemonViewModelTest: BaseTest() {
     }
 
 
-//    @Test
-//    fun `Given that getPokemon api call returns error, make sure that we show an error message`() = runTest {
-//        //Given
-//        coEvery {
-//            pokemonRepository.getPokemon()
-//        } throws Exception("Unexpected error occurred")
-//        //When
-//        pokemonViewModel.getPokemon()
-//        coVerify {
-//            pokemonRepository.getPokemon()
-//        }
-//        //Then
-//        pokemonViewModel.viewState.test {
-//            assert(awaitItem() is PokemonViewModel.ViewState.Error)
-//        }
-//        assertEquals(PokemonViewModel.ViewState.Error("Internal server error, try again later."), pokemonViewModel.viewState.value)
-//    }
+    @Test
+    fun `Given that getPokemon api call returns error, make sure that we show an error message`() = runTest {
+        //Given
+        coEvery {
+            pokemonRepository.getPokemon().message()
+        } returns "Internal server error, try again later."
+        //When
+        pokemonViewModel.getPokemon()
+        coVerify {
+            pokemonRepository.getPokemon()
+        }
+        //Then
+        pokemonViewModel.viewState.test {
+            assert(awaitItem() is PokemonViewModel.ViewState.Error)
+            assertEquals(PokemonViewModel.ViewState.Error("Internal server error, try again later."), pokemonViewModel.viewState.value)
+        }
+    }
 
 }
