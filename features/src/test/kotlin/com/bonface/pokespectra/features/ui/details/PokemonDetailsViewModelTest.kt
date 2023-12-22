@@ -1,8 +1,10 @@
 package com.bonface.pokespectra.features.ui.details
 
+import app.cash.turbine.test
 import com.bonface.pokespectra.libs.repository.PokemonRepository
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
+import com.bonface.pokespectra.utils.TestCreationUtils
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,60 +41,54 @@ class PokemonDetailsViewModelTest: BaseTest() {
         clearAllMocks()
     }
 
-
     @Test
-    fun `should emit error object when api response error`() {
-//        viewModel.viewState.collect {
-//            viewStates.add(it)
-//
-//            val message = "Error from api"
-//            coEvery {
-//                pokemonRepository.getPokemon()
-//            } throws IllegalAccessException(message)
-//
-//            viewModel.getPokemon()
-//
-//            coVerify {
-//                pokemonRepository.getPokemon()
-//            }
-//            assertEquals(PokemonViewModel.ViewState.Error(message), viewModel.viewState.value)
-//        }
-
-
-    }
-
-
-
-
-
-    @Test
-    fun `Given that getPokemonDetails api call has been initiated, expose a loading ui state`() {
+    fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
         viewModel = PokemonDetailsViewModel(pokemonRepository)
         // Assert
         assert(viewModel.viewState.value is PokemonDetailsViewModel.ViewState.Loading)
     }
 
     @Test
-    fun `creating a viewmodel updates ui state to success after loading`() {
-//        // Arrange
-//        val viewModel = PokemonViewModel(pokemonRepository)
-//
-//        val expectedUiState = Resource.Success(testResponse)
-//        // Assert
-//        val actualState = viewModel.uiState.value
-//        assertEquals(actualState, expectedUiState)
+    fun `Given that getPokemonDetails api call return success, make sure that we show a success state`() = runTest {
+        val details = TestCreationUtils.getPokemonDetails()
+        val species = TestCreationUtils.getPokemonSpecies()
+        coEvery {
+            pokemonRepository.getPokemonDetails(1).body()
+        } returns details
+        coEvery {
+            pokemonRepository.getPokemonSpeciesDetails(1).body()
+        } returns species
+
+        viewModel.getPokemonDetails(1)
+
+        coEvery {
+            pokemonRepository.getPokemon()
+            pokemonRepository.getPokemonSpeciesDetails(1).body()
+        }
+        assertEquals(details.name, "bulbasaur")
+        assertEquals(details.weight, 69)
+        assertEquals(species.color.name, "green")
+        assertEquals(species.habitat.name, "grassland")
     }
 
-
-
     @Test
-    fun `Given that getPokemon api call return success, make sure that we show a success state`() = runTest {
-
-    }
-
-    @Test
-    fun `Given that getPokemon api call return an error, make sure that we show error message`() = runTest {
-
+    fun `Given that getPokemonDetails api call returns error, make sure that we emit error state`() = runTest {
+        //Given
+        coEvery {
+            pokemonRepository.getPokemonDetails(1)
+            pokemonRepository.getPokemonSpeciesDetails(1)
+        } throws IllegalAccessException("Something went wrong")
+        //When
+        viewModel.getPokemonDetails(1)
+        coVerify {
+            pokemonRepository.getPokemonDetails(1)
+            pokemonRepository.getPokemonSpeciesDetails(1)
+        }
+        //Then
+        viewModel.viewState.test {
+            assert(awaitItem() is PokemonDetailsViewModel.ViewState.Error)
+            assertEquals(PokemonDetailsViewModel.ViewState.Error("Something went wrong"), viewModel.viewState.value)
+        }
     }
 
 }
