@@ -4,11 +4,9 @@ package com.bonface.pokespectra.features.ui.home
 import com.bonface.pokespectra.libs.repository.PokemonRepository
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
-import com.bonface.pokespectra.utils.TestDispatcherProvider
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -33,7 +31,7 @@ class PokemonViewModelTest: BaseTest() {
     @Before
     override fun beforeEach() {
         super.beforeEach()
-        Dispatchers.setMain(TestDispatcherProvider().io)
+        Dispatchers.setMain(Dispatchers.IO)
         viewModel = PokemonViewModel(pokemonRepository)
     }
 
