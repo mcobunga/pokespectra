@@ -2,7 +2,7 @@ package com.bonface.pokespectra.features.utils
 
 import com.bonface.pokespectra.core.BaseApplication.Companion.getAppContext
 import com.bonface.pokespectra.features.R
-import com.bonface.pokespectra.libs.model.MobileException
+import com.bonface.pokespectra.libs.data.model.MobileException
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
@@ -15,15 +15,31 @@ import javax.net.ssl.SSLHandshakeException
 object ErrorHandler {
 
     @Throws(IOException::class)
-    fun handleException(exception: Exception): MobileException {
+    fun handleException(exception: Throwable): MobileException {
         exception.printStackTrace()
         return when (exception) {
-            is UnknownHostException -> MobileException(getAppContext().getString(R.string.no_internet_connection), 1000)
-            is SocketTimeoutException -> MobileException(getAppContext().getString(R.string.no_internet_connection), 3000)
-            is SSLHandshakeException -> MobileException(getAppContext().getString(R.string.app_update_needed), 4000)
-            is ConnectException -> MobileException(getAppContext().getString(R.string.unable_to_connect), 5000)
+            is UnknownHostException -> MobileException(
+                getAppContext().getString(R.string.no_internet_connection),
+                1000
+            )
+            is SocketTimeoutException -> MobileException(
+                getAppContext().getString(R.string.no_internet_connection),
+                3000
+            )
+            is SSLHandshakeException -> MobileException(
+                getAppContext().getString(R.string.app_update_needed),
+                4000
+            )
+            is ConnectException -> MobileException(
+                getAppContext().getString(R.string.unable_to_connect),
+                5000
+            )
             is HttpException -> getServerSideExceptions(exception)
-            is IOException -> MobileException(getAppContext().getString(R.string.problem_processing_request), 2000)
+            is IOException -> MobileException(
+                getAppContext().getString(
+                    R.string.problem_processing_request
+                ), 2000
+            )
             else -> MobileException(exception.message.toString(), 1)
         }
     }
@@ -43,7 +59,10 @@ object ErrorHandler {
         }
 
         val errorCode = e.response()?.code()
-        return MobileException(message.toString(), errorCode?: -1)
+        return MobileException(
+            message.toString(),
+            errorCode ?: -1
+        )
     }
 
 }

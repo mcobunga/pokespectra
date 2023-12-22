@@ -1,0 +1,44 @@
+{
+    "color":{
+        "name":"green",
+        "url":"https://pokeapi.co/api/v2/pokemon-color/5/"
+    },
+    "flavor_text_entries":[
+        {
+            "flavor_text":"A strange seed was\nplanted on its\nback at birth.\nThe plant sprouts\nand grows with\nthis POKéMON.",
+            "language":{
+                "name":"en",
+                "url":"https://pokeapi.co/api/v2/language/9/"
+            }
+        }
+    ],
+    "habitat":{
+        "name":"grassland",
+        "url":"https://pokeapi.co/api/v2/pokemon-habitat/3/"
+    },
+    "id":1,
+    "is_baby":false,
+    "name":"bulbasaur",
+    "names":[
+        {
+            "language":{
+                "name":"roomaji",
+                "url":"https://pokeapi.co/api/v2/language/2/"
+            },
+            "name":"Fushigidane"
+        }
+    ],
+    "shape":{
+        "name":"quadruped",
+        "url":"https://pokeapi.co/api/v2/pokemon-shape/8/"
+    },
+    "varieties":[
+        {
+            "is_default":true,
+            "pokemon":{
+                "name":"bulbasaur",
+                "url":"https://pokeapi.co/api/v2/pokemon/1/"
+            }
+        }
+    ]
+}
