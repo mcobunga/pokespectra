@@ -11,12 +11,12 @@ import org.junit.Before
 @OptIn(ExperimentalCoroutinesApi::class)
 open class BaseTest {
     @Before
-    open fun beforeEach() {
+    open fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
     }
 
     @After
-    open fun afterEach() {
+    open fun teardown() {
         Dispatchers.resetMain()
     }
 }

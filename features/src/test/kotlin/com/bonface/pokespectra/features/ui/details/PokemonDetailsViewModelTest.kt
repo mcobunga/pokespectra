@@ -6,10 +6,8 @@ import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
 import com.bonface.pokespectra.utils.TestCreationUtils
 import io.mockk.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -23,29 +21,27 @@ import org.mockito.junit.MockitoJUnitRunner
 class PokemonDetailsViewModelTest: BaseTest() {
 
     private val pokemonRepository: PokemonRepository = mockk(relaxed = true)
-    private lateinit var viewModel: PokemonDetailsViewModel
+    private lateinit var pokemonDetailsViewModel: PokemonDetailsViewModel
 
     @get:Rule
     val rule = MainDispatcherRule()
 
     @Before
-    override fun beforeEach() {
-        super.beforeEach()
-        Dispatchers.setMain(Dispatchers.IO)
-        viewModel = spyk(PokemonDetailsViewModel(pokemonRepository))
+    override fun setup() {
+        super.setup()
+        pokemonDetailsViewModel = spyk(PokemonDetailsViewModel(pokemonRepository))
     }
 
     @After
-    override fun afterEach() {
-        super.afterEach()
+    override fun teardown() {
         clearAllMocks()
     }
 
     @Test
     fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
-        viewModel = PokemonDetailsViewModel(pokemonRepository)
+        pokemonDetailsViewModel = PokemonDetailsViewModel(pokemonRepository)
         // Assert
-        assert(viewModel.viewState.value is PokemonDetailsViewModel.ViewState.Loading)
+        assert(pokemonDetailsViewModel.viewState.value is PokemonDetailsViewModel.ViewState.Loading)
     }
 
     @Test
@@ -59,7 +55,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
             pokemonRepository.getPokemonSpeciesDetails(1).body()
         } returns species
 
-        viewModel.getPokemonDetails(1)
+        pokemonDetailsViewModel.getPokemonDetails(1)
 
         coEvery {
             pokemonRepository.getPokemon()
@@ -77,17 +73,17 @@ class PokemonDetailsViewModelTest: BaseTest() {
         coEvery {
             pokemonRepository.getPokemonDetails(1)
             pokemonRepository.getPokemonSpeciesDetails(1)
-        } throws Exception("Something went wrong")
+        } throws RuntimeException("Something went wrong")
         //When
-        viewModel.getPokemonDetails(1)
+        pokemonDetailsViewModel.getPokemonDetails(1)
         coVerify {
             pokemonRepository.getPokemonDetails(1)
             pokemonRepository.getPokemonSpeciesDetails(1)
         }
         //Then
-        viewModel.viewState.test {
+        pokemonDetailsViewModel.viewState.test {
             assert(awaitItem() is PokemonDetailsViewModel.ViewState.Error)
-            assertEquals(PokemonDetailsViewModel.ViewState.Error("Something went wrong"), viewModel.viewState.value)
+            assertEquals(PokemonDetailsViewModel.ViewState.Error("Something went wrong"), pokemonDetailsViewModel.viewState.value)
         }
     }
 
