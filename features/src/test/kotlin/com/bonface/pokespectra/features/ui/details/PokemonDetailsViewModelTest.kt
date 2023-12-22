@@ -77,7 +77,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
         coEvery {
             pokemonRepository.getPokemonDetails(1)
             pokemonRepository.getPokemonSpeciesDetails(1)
-        } throws IllegalAccessException("Something went wrong")
+        } throws Exception("Something went wrong")
         //When
         viewModel.getPokemonDetails(1)
         coVerify {

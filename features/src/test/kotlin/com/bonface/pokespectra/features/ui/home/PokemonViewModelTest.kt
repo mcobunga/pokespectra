@@ -16,8 +16,10 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -70,7 +72,7 @@ class PokemonViewModelTest: BaseTest() {
         //Given
         coEvery {
             pokemonRepository.getPokemon()
-        } throws IllegalAccessException("Something went wrong")
+        } throws Exception("Something went wrong")
         //When
         viewModel.getPokemon()
         coVerify {
