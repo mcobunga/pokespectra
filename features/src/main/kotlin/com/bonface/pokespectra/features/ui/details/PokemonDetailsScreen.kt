@@ -45,12 +45,11 @@ import com.bonface.pokespectra.features.ui.components.ErrorOrEmpty
 import com.bonface.pokespectra.features.ui.components.ImageFromURL
 import com.bonface.pokespectra.features.ui.components.Loading
 import com.bonface.pokespectra.features.ui.components.RetrySection
-import com.bonface.pokespectra.features.utils.PokedexColor
-import com.bonface.pokespectra.features.utils.PokemonColorExt.getPokedexColor
-import com.bonface.pokespectra.features.utils.Resource
+import com.bonface.pokespectra.features.utils.PrimaryColor
+import com.bonface.pokespectra.features.utils.PrimaryColorExtensions.getPrimaryColor
 import com.bonface.pokespectra.features.utils.TopAppBarState
 import com.bonface.pokespectra.features.utils.TopAppBarStateProvider
-import com.bonface.pokespectra.libs.model.PokedexDetails
+import com.bonface.pokespectra.libs.data.model.PokedexDetails
 
 @Composable
 fun PokemonDetailsScreen(
@@ -58,7 +57,7 @@ fun PokemonDetailsScreen(
     pokemonId: Int,
     pokemonDetailsViewModel: PokemonDetailsViewModel = hiltViewModel()
 ) {
-    val uiState by pokemonDetailsViewModel.uiState.collectAsStateWithLifecycle()
+    val viewState by pokemonDetailsViewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
@@ -73,23 +72,23 @@ fun PokemonDetailsScreen(
                 .fillMaxSize()
         ) {
             TopBar(navController)
-            when(uiState) {
-                is Resource.Success -> {
-                    uiState.data.let { result ->
+            when(viewState) {
+                is PokemonDetailsViewModel.ViewState.Success -> {
+                    (viewState as PokemonDetailsViewModel.ViewState.Success).details.let { result ->
                         if (result != null) {
-                            TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPokedexColor(result.color).color.copy(alpha = .5F)))
+                            TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
                             PokemonDetails(result)
                         } else {
                             ErrorOrEmpty(errorMessage = stringResource(R.string.empty_pokemon))
                         }
                     }
                 }
-                is Resource.Error -> {
-                    RetrySection(error = uiState.message.toString()) {
+                is PokemonDetailsViewModel.ViewState.Error -> {
+                    RetrySection(error = (viewState as PokemonDetailsViewModel.ViewState.Error).message) {
                         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
                     }
                 }
-                is Resource.Loading -> {
+                is PokemonDetailsViewModel.ViewState.Loading -> {
                     Loading()
                 }
             }
@@ -104,7 +103,7 @@ fun TopBar(navController: NavHostController) {
 
 @Composable
 fun PokemonDetails(pokedexDetails: PokedexDetails, modifier: Modifier = Modifier) {
-    val pokedexColor = getPokedexColor(pokedexDetails.color)
+    val pokedexColor = getPrimaryColor(pokedexDetails.color)
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -134,11 +133,11 @@ fun PokemonDetails(pokedexDetails: PokedexDetails, modifier: Modifier = Modifier
 }
 
 @Composable
-fun PokemonImage(imageUrl: String, pokedexColor: PokedexColor, modifier: Modifier = Modifier) {
+fun PokemonImage(imageUrl: String, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(pokedexColor.color.copy(alpha = .5F)),
+            .background(primaryColor.color.copy(alpha = .5F)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -164,7 +163,7 @@ fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, pokedexColor: PokedexColor, modifier: Modifier = Modifier) {
+fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_abilities, name.replaceFirstChar { it.titlecase() })
@@ -175,11 +174,11 @@ fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, poked
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         abilities.forEach {
-            val selectedTextColor = if (pokedexColor.color == lightOnPrimary) lightScrim else lightOnPrimary
+            val selectedTextColor = if (primaryColor.color == lightOnPrimary) lightScrim else lightOnPrimary
             InputChip(
                 shape = RoundedCornerShape(12.dp),
                 label = { Text(style = MaterialTheme.typography.bodyMedium, text = it.first, color = lightScrim) },
-                colors = InputChipDefaults.inputChipColors(selectedContainerColor = pokedexColor.color.copy(alpha = .5F), selectedLabelColor = selectedTextColor),
+                colors = InputChipDefaults.inputChipColors(selectedContainerColor = primaryColor.color.copy(alpha = .5F), selectedLabelColor = selectedTextColor),
                 selected = it.second,
                 onClick = { },
             )
@@ -212,7 +211,7 @@ fun PokemonSize(weight: Int, height: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PokemonStats(name: String, stats: List<Pair<String, Int>>, pokedexColor: PokedexColor, modifier: Modifier = Modifier) {
+fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_stats, name.replaceFirstChar { it.titlecase() })
@@ -234,14 +233,14 @@ fun PokemonStats(name: String, stats: List<Pair<String, Int>>, pokedexColor: Pok
             Box(
                 modifier = modifier.weight(.5F)
             ) {
-                val trackColor = if (pokedexColor.color == lightOutlineVariant) lightOutline else lightOutlineVariant
+                val trackColor = if (primaryColor.color == lightOutlineVariant) lightOutline else lightOutlineVariant
                 LinearProgressIndicator(
                     modifier = modifier
                         .fillMaxWidth()
                         .height(12.dp)
                         .clip(RoundedCornerShape(20.dp)),
                     progress = (stat.second.toFloat() / 100),
-                    color = pokedexColor.color.copy(.5F),
+                    color = primaryColor.color.copy(.5F),
                     trackColor = trackColor
                 )
             }

@@ -15,8 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-
- val LightColorScheme = lightColorScheme(
+ val lightColorScheme = lightColorScheme(
     primary = lightPrimary,
     onPrimary = lightOnPrimary,
     primaryContainer = lightPrimaryContainer,
@@ -48,7 +47,7 @@ import androidx.core.view.WindowCompat
     scrim = lightScrim,
 )
 
-private val DarkColorScheme = darkColorScheme(
+private val darkColorScheme = darkColorScheme(
     primary = darkPrimary,
     onPrimary = darkOnPrimary,
     primaryContainer = darkPrimaryContainer,
@@ -103,8 +102,8 @@ fun PokeSpectraTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

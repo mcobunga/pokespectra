@@ -46,9 +46,8 @@ import com.bonface.pokespectra.features.ui.components.ErrorOrEmpty
 import com.bonface.pokespectra.features.ui.components.ImageFromURL
 import com.bonface.pokespectra.features.ui.components.Loading
 import com.bonface.pokespectra.features.ui.components.RetrySection
-import com.bonface.pokespectra.features.utils.Resource
+import com.bonface.pokespectra.libs.data.model.Pokedex
 import com.bonface.pokespectra.libs.mappers.toPokedex
-import com.bonface.pokespectra.libs.model.Pokedex
 import com.bonface.pokespectra.libs.utils.getPokemonImageUrl
 
 @Composable
@@ -56,7 +55,7 @@ fun MainScreen(
     navigateToPokemonDetails: (Int) -> Unit,
     pokemonViewModel: PokemonViewModel = hiltViewModel()
 ) {
-    val pokemon by pokemonViewModel.pokemon.collectAsStateWithLifecycle()
+    val viewState by pokemonViewModel.viewState.collectAsStateWithLifecycle()
     var pokedexItems by remember { mutableStateOf(listOf<Pokedex>()) }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -68,9 +67,9 @@ fun MainScreen(
         ) {
             AppTopBar(stringResource(id = R.string.title_home))
 
-            when(pokemon) {
-                is Resource.Success -> {
-                    val result = pokemon.data?.results?.map {
+            when(viewState) {
+                is PokemonViewModel.ViewState.Success -> {
+                    val result = (viewState as PokemonViewModel.ViewState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
                     if (result != null) {
@@ -78,12 +77,13 @@ fun MainScreen(
                     }
                     PokemonScreen(pokedexItems, navigateToPokemonDetails)
                 }
-                is Resource.Error -> {
-                    RetrySection(error = pokemon.message.toString()) {
+                is PokemonViewModel.ViewState.Error -> {
+                    val error = (viewState as PokemonViewModel.ViewState.Error).message
+                    RetrySection(error = error) {
                         pokemonViewModel.getPokemon()
                     }
                 }
-                is Resource.Loading -> {
+                is PokemonViewModel.ViewState.Loading -> {
                     Loading()
                 }
             }
@@ -236,5 +236,5 @@ fun PokemonScreenPreview() {
 }
 
 private val dummyPokedex = List(100) {
-    Pokedex("pokedex$it", getPokemonImageUrl(it+1), it)
+    Pokedex("pokedex$it", getPokemonImageUrl(it + 1), it)
 }

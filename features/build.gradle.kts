@@ -84,4 +84,11 @@ dependencies {
     androidTestImplementation(Dependencies.uiTestJunit4)
     debugImplementation(Dependencies.uiTooling)
     debugImplementation(Dependencies.uiTestManifest)
+
+    testImplementation(Dependencies.mockk)
+    testImplementation(Dependencies.mockitoCore)
+    testImplementation(Dependencies.mockitoKotlin)
+    testImplementation(Dependencies.coroutineTest)
+    testImplementation(Dependencies.archCore)
+    testImplementation(Dependencies.turbine)
 }

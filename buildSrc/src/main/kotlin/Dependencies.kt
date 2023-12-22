@@ -31,6 +31,14 @@ object Versions {
     const val coilCompose = "2.4.0"
     const val hiltViewModel = "1.0.0-alpha03"
     const val hiltNavigation = "1.1.0"
+    const val mockk = "1.13.8"
+    const val mockkWebServer = "5.0.0-alpha.11"
+    const val coroutineTest = "1.6.4"
+    const val archCore = "2.2.0"
+    const val turbine = "1.0.0"
+    const val mockitoCore = "5.3.1"
+    const val mockitoKotlin = "4.1.0"
+    const val truth = "1.1.5"
 }
 
 object Dependencies {
@@ -91,5 +99,16 @@ object Dependencies {
     const val uiTestJunit4 = "androidx.compose.ui:ui-test-junit4"
     const val uiTooling = "androidx.compose.ui:ui-tooling"
     const val uiTestManifest = "androidx.compose.ui:ui-test-manifest"
+    const val archCore = "androidx.arch.core:core-testing:${Versions.archCore}"
+
+    const val mockk = "io.mockk:mockk:${Versions.mockk}"
+    const val mockkWebSever = "com.squareup.okhttp3:mockwebserver:${Versions.mockkWebServer}"
+    const val coroutineTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutineTest}"
+    // mockito for creating mocks and templates
+    const val mockitoCore = "org.mockito:mockito-core:${Versions.mockitoCore}"
+    const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}"
+    // turbine for testing the flows
+    const val turbine = "app.cash.turbine:turbine:${Versions.turbine}"
+    const val truth = "com.google.truth:truth:${Versions.truth}"
 
 }

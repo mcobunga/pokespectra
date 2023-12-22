@@ -2,13 +2,13 @@ package com.bonface.pokespectra.features.ui.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonface.pokespectra.features.utils.ErrorHandler
+import com.bonface.pokespectra.features.utils.ErrorHandler.handleException
 import com.bonface.pokespectra.features.utils.Resource
-import com.bonface.pokespectra.libs.data.PokemonRepository
+import com.bonface.pokespectra.libs.data.model.DetailedPokedexResponse
+import com.bonface.pokespectra.libs.data.model.PokedexDetails
+import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
 import com.bonface.pokespectra.libs.mappers.toPokedexDetails
-import com.bonface.pokespectra.libs.model.DetailedPokedexResponse
-import com.bonface.pokespectra.libs.model.PokedexDetails
-import com.bonface.pokespectra.libs.model.PokemonSpeciesResponse
+import com.bonface.pokespectra.libs.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +24,11 @@ class PokemonDetailsViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<Resource<PokedexDetails>>(Resource.Loading())
-    val uiState = _uiState.asStateFlow()
+    private val _viewState = MutableStateFlow<ViewState>(ViewState.Loading)
+    val viewState = _viewState.asStateFlow()
 
     fun getPokemonDetails(pokemonId: Int) {
-        _uiState.value = Resource.Loading()
+        _viewState.value = ViewState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 flowOf(pokemonRepository.getPokemonDetails(pokemonId))
@@ -39,18 +39,20 @@ class PokemonDetailsViewModel @Inject constructor(
                         )
                     }
                     .collect {
-                        handleResponse(it)
-                        _uiState.value = handleResponse(it)
+                        when(val result = handleResponse(it)) {
+                            is Resource.Error -> { _viewState.value = ViewState.Error(result.message.toString()) }
+                            is Resource.Success -> { _viewState.value = ViewState.Success(result.data) }
+                            else -> {}
+                        }
                     }
             } catch (e: Exception) {
                 e.printStackTrace()
-                val error = ErrorHandler.handleException(e)
-                _uiState.value = Resource.Error(error.message.toString())
+                _viewState.value = ViewState.Error(handleException(e).message.toString())
             }
         }
     }
 
-    private fun handleResponse(response: Pair<Response<DetailedPokedexResponse>, Response<PokemonSpeciesResponse>>): Resource<PokedexDetails> {
+    private  fun handleResponse(response: Pair<Response<DetailedPokedexResponse>, Response<PokemonSpeciesResponse>>): Resource<PokedexDetails> {
         if (response.first.isSuccessful && response.first.body() != null) {
             val detailsResult = response.first.body()
             if (response.second.isSuccessful && response.second.body() != null) {
@@ -63,5 +65,10 @@ class PokemonDetailsViewModel @Inject constructor(
         return Resource.Error(response.first.message().toString())
     }
 
+    sealed class ViewState {
+        data object Loading : ViewState()
+        data class Error(val message: String) : ViewState()
+        data class Success(val details: PokedexDetails?) : ViewState()
+    }
 
 }

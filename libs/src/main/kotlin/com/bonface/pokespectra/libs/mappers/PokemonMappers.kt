@@ -1,10 +1,10 @@
 package com.bonface.pokespectra.libs.mappers
 
-import com.bonface.pokespectra.libs.model.DetailedPokedexResponse
-import com.bonface.pokespectra.libs.model.Pokedex
-import com.bonface.pokespectra.libs.model.PokedexDetails
-import com.bonface.pokespectra.libs.model.Pokemon
-import com.bonface.pokespectra.libs.model.PokemonSpeciesResponse
+import com.bonface.pokespectra.libs.data.model.DetailedPokedexResponse
+import com.bonface.pokespectra.libs.data.model.Pokedex
+import com.bonface.pokespectra.libs.data.model.PokedexDetails
+import com.bonface.pokespectra.libs.data.model.Pokemon
+import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
 import com.bonface.pokespectra.libs.utils.getPokemonImageUrl
 
 fun Pokemon.toPokedex(): Pokedex {
@@ -21,7 +21,8 @@ fun Pair<DetailedPokedexResponse, PokemonSpeciesResponse>.toPokedexDetails(): Po
     return PokedexDetails(
         pokemonId = pokemonId,
         name = this.first.species.name,
-        about = this.second.flavorTextEntries.firstOrNull()?.flavorText?.replace("\n", " ").orEmpty(),
+        about = this.second.flavorTextEntries.firstOrNull()?.flavorText?.replace("\n", " ")
+            .orEmpty(),
         weight = this.first.weight,
         height = this.first.height,
         color = this.second.color.name,
