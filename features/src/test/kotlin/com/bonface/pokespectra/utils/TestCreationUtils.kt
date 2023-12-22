@@ -22,6 +22,7 @@ import com.bonface.pokespectra.libs.data.model.StatDetails
 import com.bonface.pokespectra.libs.data.model.Type
 import com.bonface.pokespectra.libs.data.model.Variety
 import com.bonface.pokespectra.libs.mappers.toPokedexDetails
+import okhttp3.ResponseBody
 import retrofit2.Response
 
 object TestCreationUtils {
@@ -56,7 +57,6 @@ object TestCreationUtils {
         )
     }
 
-
     fun getPokemonSpecies(): PokemonSpeciesResponse {
         return PokemonSpeciesResponse(
             color = SpeciesColor("green", "https://pokeapi.co/api/v2/pokemon-color/5/"),
@@ -76,28 +76,6 @@ object TestCreationUtils {
                 Variety(true, Pokemon("bulbasaur", "https://pokeapi.co/api/v2/pokemon/1/"))
             )
         )
-    }
-
-    fun handleResponse(response: Response<PokemonResponse>): Resource<PokemonResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
-            }
-        }
-        return Resource.Error(message = response.message())
-    }
-
-    fun handleResponse(response: Pair<Response<DetailedPokedexResponse>, Response<PokemonSpeciesResponse>>): Resource<PokedexDetails> {
-        if (response.first.isSuccessful && response.first.body() != null) {
-            val detailsResult = response.first.body()
-            if (response.second.isSuccessful && response.second.body() != null) {
-                val speciesResult = response.second.body()
-                val pairedResult = Pair(detailsResult!!, speciesResult!!)
-                return Resource.Success(pairedResult.toPokedexDetails())
-            }
-            return Resource.Error(response.second.message().toString())
-        }
-        return Resource.Error(response.first.message().toString())
     }
 
 }

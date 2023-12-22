@@ -65,7 +65,7 @@ class PokemonViewModelTest: BaseTest() {
 
 
 //    @Test
-//    fun `Given that getPokemon api call returns error, make sure that we show error message`() = runTest {
+//    fun `Given that getPokemon api call returns error, make sure that we show an error message`() = runTest {
 //        //Given
 //        coEvery {
 //            pokemonRepository.getPokemon()
@@ -78,8 +78,8 @@ class PokemonViewModelTest: BaseTest() {
 //        //Then
 //        pokemonViewModel.viewState.test {
 //            assert(awaitItem() is PokemonViewModel.ViewState.Error)
-//            assertEquals(PokemonViewModel.ViewState.Error("Unexpected error occurred"), pokemonViewModel.viewState.value)
 //        }
+//        assertEquals(PokemonViewModel.ViewState.Error("Internal server error, try again later."), pokemonViewModel.viewState.value)
 //    }
 
 }

@@ -37,8 +37,7 @@ class PokemonDetailsViewModel @Inject constructor(
                             pokemonDetails,
                             pokemonSpecies
                         )
-                    }
-                    .collect {
+                    }.collect {
                         when(val result = handleResponse(it)) {
                             is Resource.Error -> { _viewState.value = ViewState.Error(result.message.toString()) }
                             is Resource.Success -> { _viewState.value = ViewState.Success(result.data) }
