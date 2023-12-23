@@ -8,7 +8,7 @@
     <string name="service_unavailable">Service temporarily unavailable, try again later</string>
     <string name="no_server_response">There was a problem completing your request. Try again later.</string>
 
-    <string name="title_home">Pokemon</string>
+    <string name="title_home">Elemental Codex Collection</string>
     <string name="search_placeholder">Search pokemon…</string>
     <string name="pokemon_image_desc">Pokemon image</string>
     <string name="retry">Retry</string>

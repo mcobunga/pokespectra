@@ -47,12 +47,12 @@ This project has been implemented using a combination of tools and resources, so
 # Screenshots
 
 <p align="center">
-<img width="40%" alt="Screenshot 2023-12-21 at 16 57 53" src="https://github.com/mcobunga/pokespectra/assets/25502580/dcd7e3e4-0e11-40c9-b469-b9e68094b0f9" style="centre">
+<img width="40%" alt="Screenshot 2023-12-21 at 16 57 53" src="https://github.com/mcobunga/pokespectra/assets/25502580/9495b945-02f5-4f7d-bc7f-e4270b20cc65" style="centre">
 </p>
 
 
 <p align="center">
-<img width="40%" alt="Screenshot 2023-12-21 at 11.02.42" src="https://github.com/mcobunga/pokespectra/assets/25502580/350bd941-1fcb-4713-a308-b20bee455df2" style="centre">
+<img width="40%" alt="Screenshot 2023-12-21 at 11.02.42" src="https://github.com/mcobunga/pokespectra/assets/25502580/8af1f24e-e44b-4766-82b2-10aaf92e7c8c" style="centre">
 </p>
 
 
