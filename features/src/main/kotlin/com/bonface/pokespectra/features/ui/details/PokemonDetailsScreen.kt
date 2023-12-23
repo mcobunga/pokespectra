@@ -188,7 +188,7 @@ fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, prima
 }
 
 @Composable
-fun PokemonSize(weight: Int, height: Int, modifier: Modifier = Modifier) {
+fun PokemonSize(weight: String, height: String, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -199,12 +199,12 @@ fun PokemonSize(weight: Int, height: Int, modifier: Modifier = Modifier) {
         Text(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
             modifier = modifier.weight(.5F),
-            text = stringResource(id = R.string.pokemon_weight, weight.toString())
+            text = stringResource(id = R.string.pokemon_weight, weight)
         )
         Text(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
             modifier = modifier.weight(.5F),
-            text = stringResource(id = R.string.pokemon_height, height.toString())
+            text = stringResource(id = R.string.pokemon_height, height)
         )
     }
     Spacer(modifier = modifier.height(16.dp))
