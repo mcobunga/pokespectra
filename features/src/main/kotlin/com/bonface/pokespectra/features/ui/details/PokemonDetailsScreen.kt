@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -177,9 +178,18 @@ fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, prima
             val selectedTextColor = if (primaryColor.color == lightOnPrimary) lightScrim else lightOnPrimary
             InputChip(
                 shape = RoundedCornerShape(12.dp),
-                label = { Text(style = MaterialTheme.typography.bodyMedium, text = it.first, color = lightScrim) },
-                colors = InputChipDefaults.inputChipColors(selectedContainerColor = primaryColor.color.copy(alpha = .5F), selectedLabelColor = selectedTextColor),
+                label = { Text(style = MaterialTheme.typography.bodyMedium, text = it.first) },
                 selected = it.second,
+                colors = InputChipDefaults.inputChipColors(
+                    labelColor = lightScrim,
+                    selectedLabelColor = lightOnPrimary,
+                    selectedContainerColor = primaryColor.color.copy(alpha = 0.5f)
+                ),
+                border = InputChipDefaults.inputChipBorder(
+                    selectedBorderColor = selectedTextColor,
+                    selectedBorderWidth = 1.2.dp,
+                    borderColor = lightScrim
+                ),
                 onClick = { },
             )
         }

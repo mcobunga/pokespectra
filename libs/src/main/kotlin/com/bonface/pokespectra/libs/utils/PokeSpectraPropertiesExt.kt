@@ -9,10 +9,10 @@ fun getPokemonImageUrl(pokemonId: Int) = buildString {
 
 fun getPokemonHeight(height: Int) : String {
     //the api returned height is in decimetres, so we change it to metres
-    return "${height / 10} m"
+    return "${height / 10.0} m"
 }
 
 fun getPokemonWeight(weight: Int) : String {
     //the api returned weight is in hectograms, so we change it to kg
-    return "${weight / 10} Kg"
+    return "${weight / 10.0} Kg"
 }
