@@ -5,7 +5,9 @@ import com.bonface.pokespectra.libs.data.model.Pokedex
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
 import com.bonface.pokespectra.libs.data.model.Pokemon
 import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
+import com.bonface.pokespectra.libs.utils.getPokemonHeight
 import com.bonface.pokespectra.libs.utils.getPokemonImageUrl
+import com.bonface.pokespectra.libs.utils.getPokemonWeight
 
 fun Pokemon.toPokedex(): Pokedex {
     val pokemonId = url.getPokemonIdFromUrl()
@@ -23,8 +25,8 @@ fun Pair<DetailedPokedexResponse, PokemonSpeciesResponse>.toPokedexDetails(): Po
         name = this.first.species.name,
         about = this.second.flavorTextEntries.firstOrNull()?.flavorText?.replace("\n", " ")
             .orEmpty(),
-        weight = this.first.weight,
-        height = this.first.height,
+        weight = getPokemonWeight(this.first.weight),
+        height = getPokemonHeight(this.first.height),
         color = this.second.color.name,
         imageUrl = getPokemonImageUrl(pokemonId),
         abilities = this.first.abilities.map {
