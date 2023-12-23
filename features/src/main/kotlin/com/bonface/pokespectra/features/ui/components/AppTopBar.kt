@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bonface.pokespectra.core.lightPrimary
-import com.bonface.pokespectra.core.lightScrim
 
 @Composable
 fun AppTopBar(titleText: String) {
@@ -39,7 +38,7 @@ fun AppTopBar(titleText: String) {
                                 .padding(0.dp),
                             textAlign = TextAlign.Center,
                             text = titleText,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = lightPrimary,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -47,8 +46,8 @@ fun AppTopBar(titleText: String) {
                 }
             }
         },
-        backgroundColor = lightPrimary,
-        contentColor = lightScrim,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = lightPrimary,
         elevation = 0.dp,
     )
 }
@@ -56,5 +55,5 @@ fun AppTopBar(titleText: String) {
 @Preview
 @Composable
 fun AppTopBarPreview() {
-    AppTopBar(titleText = "Pokemon")
+    AppTopBar(titleText = "PokeDex Panorama")
 }
