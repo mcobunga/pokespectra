@@ -41,7 +41,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
     fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
         pokemonDetailsViewModel = PokemonDetailsViewModel(pokemonRepository)
         // Assert
-        assert(pokemonDetailsViewModel.viewState.value is PokemonDetailsViewModel.UiState.Loading)
+        assert(pokemonDetailsViewModel.uiState.value is PokemonDetailsViewModel.UiState.Loading)
     }
 
     @Test
@@ -79,9 +79,9 @@ class PokemonDetailsViewModelTest: BaseTest() {
             pokemonRepository.getPokemonDetails(1)
         }
         //Then
-        pokemonDetailsViewModel.viewState.test {
+        pokemonDetailsViewModel.uiState.test {
             assert(awaitItem() is PokemonDetailsViewModel.UiState.Error)
-            assertEquals(PokemonDetailsViewModel.UiState.Error("Something went wrong"), pokemonDetailsViewModel.viewState.value)
+            assertEquals(PokemonDetailsViewModel.UiState.Error("Something went wrong"), pokemonDetailsViewModel.uiState.value)
         }
     }
 

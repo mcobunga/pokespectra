@@ -43,7 +43,7 @@ class PokemonViewModelTest: BaseTest() {
     fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
         pokemonViewModel = PokemonViewModel(pokemonRepository)
         // Assert
-        assert(pokemonViewModel.viewState.value is PokemonViewModel.UiState.Loading)
+        assert(pokemonViewModel.uiState.value is PokemonViewModel.UiState.Loading)
     }
 
     @Test
@@ -73,9 +73,9 @@ class PokemonViewModelTest: BaseTest() {
             pokemonRepository.getPokemon()
         }
         //Then
-        pokemonViewModel.viewState.test {
+        pokemonViewModel.uiState.test {
             assert(awaitItem() is PokemonViewModel.UiState.Error)
-            assertEquals(PokemonViewModel.UiState.Error("Internal server error, try again later."), pokemonViewModel.viewState.value)
+            assertEquals(PokemonViewModel.UiState.Error("Internal server error, try again later."), pokemonViewModel.uiState.value)
         }
     }
 
