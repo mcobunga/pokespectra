@@ -19,25 +19,25 @@ class PokemonViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<ViewState>(ViewState.Loading)
-    val viewState = _viewState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     init {
         getPokemon()
     }
 
     fun getPokemon() {
-        _viewState.value = ViewState.Loading
+        _uiState.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when(val result = handleResponse(pokemonRepository.getPokemon())) {
-                    is Resource.Error -> { _viewState.value = ViewState.Error(result.message.toString()) }
-                    is Resource.Success -> { _viewState.value = ViewState.Success(result.data) }
+                    is Resource.Error -> { _uiState.value = UiState.Error(result.message.toString()) }
+                    is Resource.Success -> { _uiState.value = UiState.Success(result.data) }
                     else -> {}
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _viewState.value = ViewState.Error(handleException(e).message.toString())
+                _uiState.value = UiState.Error(handleException(e).message.toString())
             }
         }
     }
@@ -52,10 +52,10 @@ class PokemonViewModel @Inject constructor(
     }
 
 
-    sealed class ViewState {
-        data object Loading : ViewState()
-        data class Error(val message: String) : ViewState()
-        data class Success(val pokemon: PokemonResponse?) : ViewState()
+    sealed class UiState {
+        data object Loading : UiState()
+        data class Error(val message: String) : UiState()
+        data class Success(val pokemon: PokemonResponse?) : UiState()
     }
 
 }
