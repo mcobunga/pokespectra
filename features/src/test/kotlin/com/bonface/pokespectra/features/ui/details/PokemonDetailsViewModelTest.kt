@@ -1,10 +1,10 @@
 package com.bonface.pokespectra.features.ui.details
 
-import app.cash.turbine.test
-import com.bonface.pokespectra.libs.repository.PokemonRepository
+import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.utils.BaseTest
+import com.bonface.pokespectra.utils.FakePokemonDetailsUseCase
 import com.bonface.pokespectra.utils.MainDispatcherRule
-import com.bonface.pokespectra.utils.TestCreationUtils
+import com.bonface.pokespectra.utils.TestCreationUtils.pokedexDetails
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -20,16 +20,17 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class PokemonDetailsViewModelTest: BaseTest() {
 
-    private val pokemonRepository: PokemonRepository = mockk(relaxed = true)
-    private lateinit var pokemonDetailsViewModel: PokemonDetailsViewModel
+    @get: Rule
+    val dispatcherRule = MainDispatcherRule()
 
-    @get:Rule
-    val rule = MainDispatcherRule()
+    private lateinit var viewModel: PokemonDetailsViewModel
+    private lateinit var fakeUseCase: FakePokemonDetailsUseCase
 
     @Before
     override fun setup() {
         super.setup()
-        pokemonDetailsViewModel = spyk(PokemonDetailsViewModel(pokemonRepository))
+        fakeUseCase = FakePokemonDetailsUseCase()
+        viewModel = PokemonDetailsViewModel(fakeUseCase)
     }
 
     @After
@@ -38,51 +39,24 @@ class PokemonDetailsViewModelTest: BaseTest() {
     }
 
     @Test
-    fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
-        pokemonDetailsViewModel = PokemonDetailsViewModel(pokemonRepository)
-        // Assert
-        assert(pokemonDetailsViewModel.viewState.value is PokemonDetailsViewModel.ViewState.Loading)
+    fun `Given that viewmodel getPokemonDetails has been initiated, make sure that we show a loading state`() = runTest {
+        fakeUseCase.emit(Resource.Loading())
+        assert(viewModel.uiState.value is PokemonDetailsViewModel.DetailsUiState.Loading)
     }
 
     @Test
     fun `Given that getPokemonDetails api call return success, make sure that we show a success state`() = runTest {
-        val details = TestCreationUtils.getPokemonDetails()
-        val species = TestCreationUtils.getPokemonSpecies()
-        coEvery {
-            pokemonRepository.getPokemonDetails(1).body()
-        } returns details
-        coEvery {
-            pokemonRepository.getPokemonSpeciesDetails(1).body()
-        } returns species
-
-        pokemonDetailsViewModel.getPokemonDetails(1)
-
-        coEvery {
-            pokemonRepository.getPokemon()
-            pokemonRepository.getPokemonSpeciesDetails(1).body()
-        }
-        assertEquals(details.name, "bulbasaur")
-        assertEquals(details.weight, 69)
-        assertEquals(species.color.name, "green")
-        assertEquals(species.habitat.name, "grassland")
+        fakeUseCase.emit(Resource.Success(pokedexDetails()))
+        assert(viewModel.uiState.value is PokemonDetailsViewModel.DetailsUiState.Success)
+        assertNotNull((viewModel.uiState.value as PokemonDetailsViewModel.DetailsUiState.Success).details)
+        assertEquals((viewModel.uiState.value as PokemonDetailsViewModel.DetailsUiState.Success).details?.pokemonId, pokedexDetails().pokemonId)
     }
 
     @Test
-    fun `Given that getPokemonDetails api call returns error, make sure that we emit error state`() = runTest {
-        //Given
-        coEvery {
-            pokemonRepository.getPokemonDetails(1).message()
-        } returns "Something went wrong"
-        //When
-        pokemonDetailsViewModel.getPokemonDetails(1)
-        coVerify {
-            pokemonRepository.getPokemonDetails(1)
-        }
-        //Then
-        pokemonDetailsViewModel.viewState.test {
-            assert(awaitItem() is PokemonDetailsViewModel.ViewState.Error)
-            assertEquals(PokemonDetailsViewModel.ViewState.Error("Something went wrong"), pokemonDetailsViewModel.viewState.value)
-        }
+    fun `Given that getPokemon api call returns an error, make sure that we emit error state`() = runTest {
+        fakeUseCase.emit(Resource.Error(message = "Something went wrong", data = null))
+        assertNotNull((viewModel.uiState.value as PokemonDetailsViewModel.DetailsUiState.Error).message)
+        assertEquals((viewModel.uiState.value as PokemonDetailsViewModel.DetailsUiState.Error).message, "Something went wrong")
     }
 
 }

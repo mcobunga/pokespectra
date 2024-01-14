@@ -26,9 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +58,7 @@ fun PokemonDetailsScreen(
     pokemonId: Int,
     pokemonDetailsViewModel: PokemonDetailsViewModel = hiltViewModel()
 ) {
-    val viewState by pokemonDetailsViewModel.viewState.collectAsStateWithLifecycle()
+    val uiState by pokemonDetailsViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
@@ -73,9 +73,9 @@ fun PokemonDetailsScreen(
                 .fillMaxSize()
         ) {
             TopBar(navController)
-            when(viewState) {
-                is PokemonDetailsViewModel.ViewState.Success -> {
-                    (viewState as PokemonDetailsViewModel.ViewState.Success).details.let { result ->
+            when(uiState) {
+                is PokemonDetailsViewModel.DetailsUiState.Success -> {
+                    (uiState as PokemonDetailsViewModel.DetailsUiState.Success).details.let { result ->
                         if (result != null) {
                             TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
                             PokemonDetails(result)
@@ -84,12 +84,12 @@ fun PokemonDetailsScreen(
                         }
                     }
                 }
-                is PokemonDetailsViewModel.ViewState.Error -> {
-                    RetrySection(error = (viewState as PokemonDetailsViewModel.ViewState.Error).message) {
+                is PokemonDetailsViewModel.DetailsUiState.Error -> {
+                    RetrySection(error = (uiState as PokemonDetailsViewModel.DetailsUiState.Error).message) {
                         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
                     }
                 }
-                is PokemonDetailsViewModel.ViewState.Loading -> {
+                is PokemonDetailsViewModel.DetailsUiState.Loading -> {
                     Loading()
                 }
             }
@@ -152,7 +152,8 @@ fun PokemonImage(imageUrl: String, primaryColor: PrimaryColor, modifier: Modifie
 fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
-        text = stringResource(id = R.string.about_pokemon, name.replaceFirstChar { it.titlecase() })
+        text = stringResource(id = R.string.about_pokemon, name.replaceFirstChar { it.titlecase() }),
+        textDecoration = TextDecoration.Underline
     )
     Spacer(modifier = modifier.height(16.dp))
     Text(
@@ -167,7 +168,8 @@ fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifie
 fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
-        text = stringResource(id = R.string.pokemon_abilities, name.replaceFirstChar { it.titlecase() })
+        text = stringResource(id = R.string.pokemon_abilities, name.replaceFirstChar { it.titlecase() }),
+        textDecoration = TextDecoration.Underline
     )
     Spacer(modifier = modifier.height(8.dp))
     Row(
@@ -224,7 +226,8 @@ fun PokemonSize(weight: String, height: String, modifier: Modifier = Modifier) {
 fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
-        text = stringResource(id = R.string.pokemon_stats, name.replaceFirstChar { it.titlecase() })
+        text = stringResource(id = R.string.pokemon_stats, name.replaceFirstChar { it.titlecase() }),
+        textDecoration = TextDecoration.Underline
     )
     Spacer(modifier = modifier.height(8.dp))
     stats.forEach { stat ->

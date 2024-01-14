@@ -2,60 +2,58 @@ package com.bonface.pokespectra.features.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonface.pokespectra.features.utils.ErrorHandler.handleException
+import com.bonface.pokespectra.features.usecases.PokemonUseCase
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
-import com.bonface.pokespectra.libs.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import retrofit2.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
-    private val pokemonRepository: PokemonRepository
+    private val pokemonUseCase: PokemonUseCase
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow<ViewState>(ViewState.Loading)
-    val viewState = _viewState.asStateFlow()
+    private val channel = Channel<Unit>(Channel.CONFLATED)
+
+    val uiState = channel
+        .receiveAsFlow()
+        .flatMapMerge {
+            pokemonUseCase.fetch()
+        }.map {
+            when(it) {
+                is Resource.Success -> UiState.Success(it.data)
+                is Resource.Error -> UiState.Error(it.message.toString())
+                is Resource.Loading -> UiState.Loading
+            }
+        }.flowOn(Dispatchers.IO)
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = UiState.Loading,
+            started = SharingStarted.WhileSubscribed(5000L)
+        )
 
     init {
         getPokemon()
     }
 
     fun getPokemon() {
-        _viewState.value = ViewState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                when(val result = handleResponse(pokemonRepository.getPokemon())) {
-                    is Resource.Error -> { _viewState.value = ViewState.Error(result.message.toString()) }
-                    is Resource.Success -> { _viewState.value = ViewState.Success(result.data) }
-                    else -> {}
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _viewState.value = ViewState.Error(handleException(e).message.toString())
-            }
-        }
+        channel.trySend(Unit)
     }
 
-    private fun handleResponse(response: Response<PokemonResponse>): Resource<PokemonResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
-            }
-        }
-        return Resource.Error(message = response.message())
-    }
-
-
-    sealed class ViewState {
-        data object Loading : ViewState()
-        data class Error(val message: String) : ViewState()
-        data class Success(val pokemon: PokemonResponse?) : ViewState()
+    sealed class UiState {
+        data object Loading : UiState()
+        data class Error(val message: String) : UiState()
+        data class Success(val pokemon: PokemonResponse?) : UiState()
     }
 
 }
