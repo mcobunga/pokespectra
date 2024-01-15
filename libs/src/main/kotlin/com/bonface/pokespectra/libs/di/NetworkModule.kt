@@ -4,6 +4,7 @@ import android.os.Environment
 import com.bonface.pokespectra.libs.data.api.PokemonApiService
 import com.bonface.pokespectra.libs.utils.Constants.BASE_URL
 import com.bonface.pokespectra.libs.BuildConfig
+import com.bonface.pokespectra.libs.repository.PokemonRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -65,8 +66,12 @@ object NetworkModule {
         .client(okHttpClient)
         .build()
 
+    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): PokemonApiService = retrofit.create(PokemonApiService::class.java)
 
+    @Singleton
+    @Provides
+    fun providesRepository(apiService: PokemonApiService) = PokemonRepository(apiService)
 
 }

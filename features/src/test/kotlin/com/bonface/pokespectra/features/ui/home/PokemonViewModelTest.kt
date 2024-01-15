@@ -1,11 +1,11 @@
 package com.bonface.pokespectra.features.ui.home
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.FakePokemonUseCase
 import com.bonface.pokespectra.utils.MainDispatcherRule
 import com.bonface.pokespectra.utils.TestCreationUtils.getPokemon
-import   com.bonface.pokespectra.features.ui.home.PokemonViewModel
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -14,6 +14,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -23,6 +24,9 @@ class PokemonViewModelTest: BaseTest() {
 
     @get: Rule
     val dispatcherRule = MainDispatcherRule()
+
+    @get:Rule
+    val rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: PokemonViewModel
     private lateinit var fakeUseCase: FakePokemonUseCase
@@ -39,7 +43,6 @@ class PokemonViewModelTest: BaseTest() {
     override fun teardown() {
         clearAllMocks()
     }
-
 
     @Test
     fun `Given that viewmodel getPokemon has been initiated, make sure that we show a loading state`() = runTest {
