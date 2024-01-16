@@ -25,7 +25,7 @@ class PokemonDetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _detailsUiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
-    val viewState = _detailsUiState.asStateFlow()
+    val uiState = _detailsUiState.asStateFlow()
 
     fun getPokemonDetails(pokemonId: Int) {
         _detailsUiState.value = DetailsUiState.Loading
