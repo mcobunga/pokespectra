@@ -68,8 +68,8 @@ fun MainScreen(
             AppTopBar(stringResource(id = R.string.title_home))
 
             when(uiState) {
-                is PokemonViewModel.UiState.Success -> {
-                    val result = (uiState as PokemonViewModel.UiState.Success).pokemon?.results?.map {
+                is UiState.Success -> {
+                    val result = (uiState as UiState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
                     if (result != null) {
@@ -77,13 +77,13 @@ fun MainScreen(
                     }
                     PokemonScreen(pokedexItems, navigateToPokemonDetails)
                 }
-                is PokemonViewModel.UiState.Error -> {
-                    val error = (uiState as PokemonViewModel.UiState.Error).message
+                is UiState.Error -> {
+                    val error = (uiState as UiState.Error).message
                     RetrySection(error = error) {
                         pokemonViewModel.getPokemon()
                     }
                 }
-                is PokemonViewModel.UiState.Loading -> {
+                is UiState.Loading -> {
                     Loading()
                 }
             }

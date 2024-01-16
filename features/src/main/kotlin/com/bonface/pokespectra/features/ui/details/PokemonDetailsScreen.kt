@@ -26,8 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -76,8 +74,8 @@ fun PokemonDetailsScreen(
         ) {
             TopBar(navController)
             when(uiState) {
-                is PokemonDetailsViewModel.UiState.Success -> {
-                    (uiState as PokemonDetailsViewModel.UiState.Success).details.let { result ->
+                is DetailsUiState.Success -> {
+                    (uiState as DetailsUiState.Success).details.let { result ->
                         if (result != null) {
                             TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
                             PokemonDetails(result)
@@ -86,12 +84,12 @@ fun PokemonDetailsScreen(
                         }
                     }
                 }
-                is PokemonDetailsViewModel.UiState.Error -> {
-                    RetrySection(error = (uiState as PokemonDetailsViewModel.UiState.Error).message) {
+                is DetailsUiState.Error -> {
+                    RetrySection(error = (uiState as DetailsUiState.Error).message) {
                         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
                     }
                 }
-                is PokemonDetailsViewModel.UiState.Loading -> {
+                is DetailsUiState.Loading -> {
                     Loading()
                 }
             }

@@ -51,11 +51,10 @@ class PokemonViewModel @Inject constructor(
         return Resource.Error(message = response.message())
     }
 
+}
 
-    sealed class UiState {
-        data object Loading : UiState()
-        data class Error(val message: String) : UiState()
-        data class Success(val pokemon: PokemonResponse?) : UiState()
-    }
-
+sealed class UiState {
+    data object Loading : UiState()
+    data class Error(val message: String) : UiState()
+    data class Success(val pokemon: PokemonResponse?) : UiState()
 }

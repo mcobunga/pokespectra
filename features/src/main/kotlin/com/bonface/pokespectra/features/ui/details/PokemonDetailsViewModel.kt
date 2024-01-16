@@ -24,11 +24,11 @@ class PokemonDetailsViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    private val _uiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun getPokemonDetails(pokemonId: Int) {
-        _uiState.value = UiState.Loading
+        _uiState.value = DetailsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 flowOf(pokemonRepository.getPokemonDetails(pokemonId))
@@ -39,14 +39,14 @@ class PokemonDetailsViewModel @Inject constructor(
                         )
                     }.collect {
                         when(val result = handleResponse(it)) {
-                            is Resource.Error -> { _uiState.value = UiState.Error(result.message.toString()) }
-                            is Resource.Success -> { _uiState.value = UiState.Success(result.data) }
+                            is Resource.Error -> { _uiState.value = DetailsUiState.Error(result.message.toString()) }
+                            is Resource.Success -> { _uiState.value = DetailsUiState.Success(result.data) }
                             else -> {}
                         }
                     }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiState.value = UiState.Error(handleException(e).message.toString())
+                _uiState.value = DetailsUiState.Error(handleException(e).message.toString())
             }
         }
     }
@@ -64,10 +64,10 @@ class PokemonDetailsViewModel @Inject constructor(
         return Resource.Error(response.first.message().toString())
     }
 
-    sealed class UiState {
-        data object Loading : UiState()
-        data class Error(val message: String) : UiState()
-        data class Success(val details: PokedexDetails?) : UiState()
-    }
+}
 
+sealed class DetailsUiState {
+    data object Loading : DetailsUiState()
+    data class Error(val message: String) : DetailsUiState()
+    data class Success(val details: PokedexDetails?) : DetailsUiState()
 }

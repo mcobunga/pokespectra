@@ -1,6 +1,5 @@
 package com.bonface.pokespectra.utils
 
-import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.Ability
 import com.bonface.pokespectra.libs.data.model.AbilityDetails
 import com.bonface.pokespectra.libs.data.model.DetailedPokedexResponse
@@ -8,7 +7,6 @@ import com.bonface.pokespectra.libs.data.model.FlavorTextEntry
 import com.bonface.pokespectra.libs.data.model.Habitat
 import com.bonface.pokespectra.libs.data.model.Language
 import com.bonface.pokespectra.libs.data.model.Name
-import com.bonface.pokespectra.libs.data.model.PokedexDetails
 import com.bonface.pokespectra.libs.data.model.Pokemon
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
 import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
@@ -21,9 +19,6 @@ import com.bonface.pokespectra.libs.data.model.Stat
 import com.bonface.pokespectra.libs.data.model.StatDetails
 import com.bonface.pokespectra.libs.data.model.Type
 import com.bonface.pokespectra.libs.data.model.Variety
-import com.bonface.pokespectra.libs.mappers.toPokedexDetails
-import okhttp3.ResponseBody
-import retrofit2.Response
 
 object TestCreationUtils {
 
