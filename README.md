@@ -1,4 +1,4 @@
-# PokeSpectra
+# PokeSpectra (Pokémon)
 
 
 ## Introduction

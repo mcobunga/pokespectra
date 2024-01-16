@@ -20,7 +20,7 @@ class PokemonViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _mainUiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
-    val viewState = _mainUiState.asStateFlow()
+    val uiState = _mainUiState.asStateFlow()
 
     init {
         getPokemon()
