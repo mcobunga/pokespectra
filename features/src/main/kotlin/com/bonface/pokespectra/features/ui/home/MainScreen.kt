@@ -67,8 +67,8 @@ fun MainScreen(
         ) {
             AppTopBar(stringResource(id = R.string.title_home))
             when(uiState) {
-                is UiState.Success -> {
-                    val result = (uiState as UiState.Success).pokemon?.results?.map {
+                is MainUiState.Success -> {
+                    val result = (uiState as MainUiState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
                     if (result != null) {
