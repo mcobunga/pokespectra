@@ -8,20 +8,11 @@ import com.bonface.pokespectra.libs.data.model.PokemonResponse
 import com.bonface.pokespectra.libs.di.NetworkModule
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
     private val pokemonUseCase: PokemonUseCase,
@@ -30,7 +21,6 @@ class PokemonViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
     val uiState = _uiState.asStateFlow()
-    private val channel = Channel<Unit>(Channel.CONFLATED)
 
     init {
         getPokemon()
