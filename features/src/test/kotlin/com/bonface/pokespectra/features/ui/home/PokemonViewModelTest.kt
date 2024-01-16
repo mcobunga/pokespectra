@@ -42,7 +42,6 @@ class PokemonViewModelTest: BaseTest() {
     @Test
     fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
         pokemonViewModel = PokemonViewModel(pokemonRepository)
-        // Assert
         assert(pokemonViewModel.uiState.value is UiState.Loading)
     }
 
