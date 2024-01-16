@@ -36,10 +36,6 @@ class PokemonViewModel @Inject constructor(
         getPokemon()
     }
 
-//    fun getPokemon() {
-//        channel.trySend(Unit)
-//    }
-
     fun getPokemon() {
         viewModelScope.launch(dispatcher) {
             pokemonUseCase.fetch().collect { result ->
@@ -51,24 +47,7 @@ class PokemonViewModel @Inject constructor(
             }
         }
     }
-
-    val mainUiState = channel
-        .receiveAsFlow()
-        .flatMapMerge {
-            pokemonUseCase.fetch()
-        }.map {
-            when(it) {
-                is Resource.Success -> MainUiState.Success(it.data)
-                is Resource.Error -> MainUiState.Error(it.message.toString())
-                is Resource.Loading -> MainUiState.Loading
-            }
-        }.flowOn(dispatcher)
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = MainUiState.Loading,
-            started = SharingStarted.WhileSubscribed(5000L)
-        )
-
+    
 }
 
 sealed class MainUiState {
