@@ -53,7 +53,6 @@ class PokemonViewModel @Inject constructor(
 
 }
 
-
 sealed class UiState {
     data object Loading : UiState()
     data class Error(val message: String) : UiState()

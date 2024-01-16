@@ -66,7 +66,6 @@ class PokemonDetailsViewModel @Inject constructor(
 
 }
 
-
 sealed class DetailsUiState {
     data object Loading : DetailsUiState()
     data class Error(val message: String) : DetailsUiState()
