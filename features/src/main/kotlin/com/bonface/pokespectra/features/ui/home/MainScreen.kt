@@ -55,7 +55,7 @@ fun MainScreen(
     navigateToPokemonDetails: (Int) -> Unit,
     pokemonViewModel: PokemonViewModel = hiltViewModel()
 ) {
-    val viewState by pokemonViewModel.viewState.collectAsStateWithLifecycle()
+    val uiState by pokemonViewModel.uiState.collectAsStateWithLifecycle()
     var pokedexItems by remember { mutableStateOf(listOf<Pokedex>()) }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -67,9 +67,9 @@ fun MainScreen(
         ) {
             AppTopBar(stringResource(id = R.string.title_home))
 
-            when(viewState) {
-                is PokemonViewModel.ViewState.Success -> {
-                    val result = (viewState as PokemonViewModel.ViewState.Success).pokemon?.results?.map {
+            when(uiState) {
+                is UiState.Success -> {
+                    val result = (uiState as UiState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
                     if (result != null) {
@@ -77,13 +77,13 @@ fun MainScreen(
                     }
                     PokemonScreen(pokedexItems, navigateToPokemonDetails)
                 }
-                is PokemonViewModel.ViewState.Error -> {
-                    val error = (viewState as PokemonViewModel.ViewState.Error).message
+                is UiState.Error -> {
+                    val error = (uiState as UiState.Error).message
                     RetrySection(error = error) {
                         pokemonViewModel.getPokemon()
                     }
                 }
-                is PokemonViewModel.ViewState.Loading -> {
+                is UiState.Loading -> {
                     Loading()
                 }
             }
