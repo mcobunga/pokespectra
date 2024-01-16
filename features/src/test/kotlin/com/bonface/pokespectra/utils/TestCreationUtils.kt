@@ -7,6 +7,7 @@ import com.bonface.pokespectra.libs.data.model.FlavorTextEntry
 import com.bonface.pokespectra.libs.data.model.Habitat
 import com.bonface.pokespectra.libs.data.model.Language
 import com.bonface.pokespectra.libs.data.model.Name
+import com.bonface.pokespectra.libs.data.model.PokedexDetails
 import com.bonface.pokespectra.libs.data.model.Pokemon
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
 import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
@@ -19,6 +20,7 @@ import com.bonface.pokespectra.libs.data.model.Stat
 import com.bonface.pokespectra.libs.data.model.StatDetails
 import com.bonface.pokespectra.libs.data.model.Type
 import com.bonface.pokespectra.libs.data.model.Variety
+import com.bonface.pokespectra.libs.mappers.toPokedexDetails
 
 object TestCreationUtils {
 
@@ -71,6 +73,11 @@ object TestCreationUtils {
                 Variety(true, Pokemon("bulbasaur", "https://pokeapi.co/api/v2/pokemon/1/"))
             )
         )
+    }
+
+    fun pokedexDetails(): PokedexDetails {
+        val pairedResult = Pair(getPokemonDetails(), getPokemonSpecies())
+        return pairedResult.toPokedexDetails()
     }
 
 }

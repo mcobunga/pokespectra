@@ -2,55 +2,52 @@ package com.bonface.pokespectra.features.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonface.pokespectra.features.utils.ErrorHandler.handleException
+import com.bonface.pokespectra.features.usecases.PokemonUseCase
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
-import com.bonface.pokespectra.libs.repository.PokemonRepository
+import com.bonface.pokespectra.libs.di.NetworkModule
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
-    private val pokemonRepository: PokemonRepository
+    private val pokemonUseCase: PokemonUseCase,
+    @NetworkModule.IODispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _mainUiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
-    val uiState = _mainUiState.asStateFlow()
+    private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
+    val uiState = _uiState.asStateFlow()
+    private val channel = Channel<Unit>(Channel.CONFLATED)
 
     init {
         getPokemon()
     }
 
     fun getPokemon() {
-        _mainUiState.value = MainUiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                when(val result = handleResponse(pokemonRepository.getPokemon())) {
-                    is Resource.Error -> { _mainUiState.value = MainUiState.Error(result.message.toString()) }
-                    is Resource.Success -> { _mainUiState.value = MainUiState.Success(result.data) }
-                    else -> {}
+        viewModelScope.launch(dispatcher) {
+            pokemonUseCase.fetch().collect { result ->
+                when(result) {
+                    is Resource.Success -> _uiState.value = MainUiState.Success(result.data)
+                    is Resource.Error -> _uiState.value = MainUiState.Error(result.message.toString())
+                    is Resource.Loading -> _uiState.value = MainUiState.Loading
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _mainUiState.value = MainUiState.Error(handleException(e).message.toString())
             }
         }
     }
-
-    private fun handleResponse(response: Response<PokemonResponse>): Resource<PokemonResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                return Resource.Success(it)
-            }
-        }
-        return Resource.Error(message = response.message())
-    }
-
+    
 }
 
 sealed class MainUiState {

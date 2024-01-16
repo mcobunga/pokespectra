@@ -1,12 +1,16 @@
 package com.bonface.pokespectra.features.ui.details
 
 import app.cash.turbine.test
-import com.bonface.pokespectra.libs.repository.PokemonRepository
+import com.bonface.pokespectra.features.usecases.PokemonDetailsUseCase
+import com.bonface.pokespectra.features.utils.Resource
+import com.bonface.pokespectra.libs.data.model.PokedexDetails
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
-import com.bonface.pokespectra.utils.TestCreationUtils
+import com.bonface.pokespectra.utils.TestCreationUtils.pokedexDetails
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
@@ -20,16 +24,17 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class PokemonDetailsViewModelTest: BaseTest() {
 
-    private val pokemonRepository: PokemonRepository = mockk(relaxed = true)
-    private lateinit var pokemonDetailsViewModel: PokemonDetailsViewModel
-
     @get:Rule
-    val rule = MainDispatcherRule()
+    val dispatcherRule = MainDispatcherRule()
+    private val dispatcher = UnconfinedTestDispatcher()
+
+    private lateinit var viewModel: PokemonDetailsViewModel
+    private val useCase = mockk<PokemonDetailsUseCase>(relaxed = true)
 
     @Before
     override fun setup() {
         super.setup()
-        pokemonDetailsViewModel = spyk(PokemonDetailsViewModel(pokemonRepository))
+        viewModel = PokemonDetailsViewModel(useCase, dispatcher)
     }
 
     @After
@@ -38,50 +43,53 @@ class PokemonDetailsViewModelTest: BaseTest() {
     }
 
     @Test
-    fun `Given that viewmodel has been initiated, make sure that we show a loading state`() {
-        pokemonDetailsViewModel = PokemonDetailsViewModel(pokemonRepository)
-        // Assert
-        assert(pokemonDetailsViewModel.uiState.value is DetailsUiState.Loading)
+    fun `Given that viewmodel getPokemonDetails has been initiated, make sure that we show a loading state`() = runTest(dispatcher) {
+        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Loading())
+        // GIVEN
+        coEvery {
+            useCase.fetch(1)
+        } returns result
+        // WHEN
+        viewModel.getPokemonDetails(1)
+        //THEN
+        viewModel.uiState.test {
+            assertEquals(DetailsUiState.Loading, awaitItem())
+            assert(viewModel.uiState.value is DetailsUiState.Loading)
+        }
     }
 
     @Test
     fun `Given that getPokemonDetails api call return success, make sure that we show a success state`() = runTest {
-        val details = TestCreationUtils.getPokemonDetails()
-        val species = TestCreationUtils.getPokemonSpecies()
+        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Success(pokedexDetails()))
+        // GIVEN
         coEvery {
-            pokemonRepository.getPokemonDetails(1).body()
-        } returns details
-        coEvery {
-            pokemonRepository.getPokemonSpeciesDetails(1).body()
-        } returns species
-
-        pokemonDetailsViewModel.getPokemonDetails(1)
-
-        coEvery {
-            pokemonRepository.getPokemon()
-            pokemonRepository.getPokemonSpeciesDetails(1).body()
+            useCase.fetch(1)
+        } returns result
+        // WHEN
+        viewModel.getPokemonDetails(1)
+        //THEN
+        viewModel.uiState.test {
+            assert(viewModel.uiState.value is DetailsUiState.Success)
+            assertEquals(DetailsUiState.Success(pokedexDetails()), awaitItem())
+            assertNotNull((viewModel.uiState.value as DetailsUiState.Success).details)
+            assertEquals((viewModel.uiState.value as DetailsUiState.Success).details?.pokemonId, pokedexDetails().pokemonId)
         }
-        assertEquals(details.name, "bulbasaur")
-        assertEquals(details.weight, 69)
-        assertEquals(species.color.name, "green")
-        assertEquals(species.habitat.name, "grassland")
     }
 
     @Test
-    fun `Given that getPokemonDetails api call returns error, make sure that we emit error state`() = runTest {
-        //Given
+    fun `Given that getPokemon api call returns an error, make sure that we emit error state`() = runTest {
+        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Error(message = "Something went wrong", data = null))
+        // GIVEN
         coEvery {
-            pokemonRepository.getPokemonDetails(1).message()
-        } returns "Something went wrong"
-        //When
-        pokemonDetailsViewModel.getPokemonDetails(1)
-        coVerify {
-            pokemonRepository.getPokemonDetails(1)
-        }
-        //Then
-        pokemonDetailsViewModel.uiState.test {
-            assert(awaitItem() is DetailsUiState.Error)
-            assertEquals(DetailsUiState.Error("Something went wrong"), pokemonDetailsViewModel.uiState.value)
+            useCase.fetch(1)
+        } returns result
+        // WHEN
+        viewModel.getPokemonDetails(1)
+        //THEN
+        viewModel.uiState.test {
+            assert(viewModel.uiState.value is DetailsUiState.Error)
+            assertEquals(DetailsUiState.Error(message = "Something went wrong"), awaitItem())
+            assertEquals((viewModel.uiState.value as DetailsUiState.Error).message, "Something went wrong")
         }
     }
 
