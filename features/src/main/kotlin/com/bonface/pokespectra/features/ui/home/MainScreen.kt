@@ -66,7 +66,6 @@ fun MainScreen(
                 .fillMaxSize()
         ) {
             AppTopBar(stringResource(id = R.string.title_home))
-
             when(uiState) {
                 is MainUiState.Success -> {
                     val result = (uiState as MainUiState.Success).pokemon?.results?.map {
