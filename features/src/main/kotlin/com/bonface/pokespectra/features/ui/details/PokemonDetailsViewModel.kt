@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.bonface.pokespectra.features.usecases.PokemonDetailsUseCase
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
+import com.bonface.pokespectra.libs.di.NetworkModule
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,14 +15,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonDetailsViewModel @Inject constructor(
-    private val pokemonDetailsUseCase: PokemonDetailsUseCase
+    private val pokemonDetailsUseCase: PokemonDetailsUseCase,
+    @NetworkModule.IODispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun getPokemonDetails(pokemonId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             pokemonDetailsUseCase.fetch(pokemonId).collect { result ->
                 when(result) {
                     is Resource.Success -> _uiState.value = DetailsUiState.Success(result.data)
@@ -32,10 +34,10 @@ class PokemonDetailsViewModel @Inject constructor(
         }
     }
 
-    sealed class DetailsUiState {
-        data object Loading : DetailsUiState()
-        data class Error(val message: String) : DetailsUiState()
-        data class Success(val details: PokedexDetails?) : DetailsUiState()
-    }
+}
 
+sealed class DetailsUiState {
+    data object Loading : DetailsUiState()
+    data class Error(val message: String) : DetailsUiState()
+    data class Success(val details: PokedexDetails?) : DetailsUiState()
 }

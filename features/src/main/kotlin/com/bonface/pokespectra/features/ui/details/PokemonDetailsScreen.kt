@@ -74,8 +74,8 @@ fun PokemonDetailsScreen(
         ) {
             TopBar(navController)
             when(uiState) {
-                is PokemonDetailsViewModel.DetailsUiState.Success -> {
-                    (uiState as PokemonDetailsViewModel.DetailsUiState.Success).details.let { result ->
+                is DetailsUiState.Success -> {
+                    (uiState as DetailsUiState.Success).details.let { result ->
                         if (result != null) {
                             TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
                             PokemonDetails(result)
@@ -84,12 +84,12 @@ fun PokemonDetailsScreen(
                         }
                     }
                 }
-                is PokemonDetailsViewModel.DetailsUiState.Error -> {
-                    RetrySection(error = (uiState as PokemonDetailsViewModel.DetailsUiState.Error).message) {
+                is DetailsUiState.Error -> {
+                    RetrySection(error = (uiState as DetailsUiState.Error).message) {
                         pokemonDetailsViewModel.getPokemonDetails(pokemonId)
                     }
                 }
-                is PokemonDetailsViewModel.DetailsUiState.Loading -> {
+                is DetailsUiState.Loading -> {
                     Loading()
                 }
             }

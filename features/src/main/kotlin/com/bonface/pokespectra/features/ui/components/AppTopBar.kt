@@ -8,6 +8,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bonface.pokespectra.core.lightPrimary
+import com.bonface.pokespectra.core.lightScrim
 
 @Composable
 fun AppTopBar(titleText: String) {
@@ -38,7 +40,7 @@ fun AppTopBar(titleText: String) {
                                 .padding(0.dp),
                             textAlign = TextAlign.Center,
                             text = titleText,
-                            color = lightPrimary,
+                            color = lightScrim,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -46,7 +48,7 @@ fun AppTopBar(titleText: String) {
                 }
             }
         },
-        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+        backgroundColor = colorScheme.surfaceVariant,
         contentColor = lightPrimary,
         elevation = 0.dp,
     )

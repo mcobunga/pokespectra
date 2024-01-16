@@ -1,20 +1,22 @@
 package com.bonface.pokespectra.features.ui.home
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
+import com.bonface.pokespectra.features.usecases.PokemonUseCase
 import com.bonface.pokespectra.features.utils.Resource
+import com.bonface.pokespectra.libs.data.model.PokemonResponse
 import com.bonface.pokespectra.utils.BaseTest
-import com.bonface.pokespectra.utils.FakePokemonUseCase
 import com.bonface.pokespectra.utils.MainDispatcherRule
 import com.bonface.pokespectra.utils.TestCreationUtils.getPokemon
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -22,21 +24,17 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class PokemonViewModelTest: BaseTest() {
 
-    @get: Rule
-    val dispatcherRule = MainDispatcherRule()
-
     @get:Rule
-    val rule: TestRule = InstantTaskExecutorRule()
+    val dispatcherRule = MainDispatcherRule()
+    private val dispatcher = UnconfinedTestDispatcher()
 
     private lateinit var viewModel: PokemonViewModel
-    private lateinit var fakeUseCase: FakePokemonUseCase
-
+    private val useCase = mockk<PokemonUseCase>(relaxed = true)
 
     @Before
     override fun setup() {
         super.setup()
-        fakeUseCase = FakePokemonUseCase()
-        viewModel = PokemonViewModel(fakeUseCase)
+        viewModel = PokemonViewModel(useCase, dispatcher)
     }
 
     @After
@@ -46,23 +44,53 @@ class PokemonViewModelTest: BaseTest() {
 
     @Test
     fun `Given that viewmodel getPokemon has been initiated, make sure that we show a loading state`() = runTest {
-        fakeUseCase.emit(Resource.Loading())
-        assert(viewModel.uiState.value is PokemonViewModel.UiState.Loading)
+        val result = MutableStateFlow<Resource<PokemonResponse>>(Resource.Loading())
+        // GIVEN
+        coEvery {
+            useCase.fetch()
+        } returns result
+        // WHEN
+        viewModel.getPokemon()
+        //THEN
+        viewModel.uiState.test {
+            assertEquals(MainUiState.Loading, awaitItem())
+            assert(viewModel.uiState.value is MainUiState.Loading)
+        }
     }
 
     @Test
     fun `Given that getPokemon api call return success, make sure that we show a success state`() = runTest {
-        fakeUseCase.emit(Resource.Success(getPokemon()))
-        assert(viewModel.uiState.value is PokemonViewModel.UiState.Success)
-        assertNotNull((viewModel.uiState.value as PokemonViewModel.UiState.Success).pokemon)
-        assertEquals((viewModel.uiState.value as PokemonViewModel.UiState.Success).pokemon?.count, getPokemon().count)
+        val result = MutableStateFlow<Resource<PokemonResponse>>(Resource.Success(getPokemon()))
+        // GIVEN
+        coEvery {
+            useCase.fetch()
+        } returns result
+        // WHEN
+        viewModel.getPokemon()
+        //THEN
+        viewModel.uiState.test {
+            assert(viewModel.uiState.value is MainUiState.Success)
+            assertEquals(MainUiState.Success(getPokemon()), awaitItem())
+            assertNotNull((viewModel.uiState.value as MainUiState.Success).pokemon)
+            assertEquals((viewModel.uiState.value as MainUiState.Success).pokemon?.count, getPokemon().count)
+        }
     }
 
     @Test
     fun `Given that getPokemon api call returns an error, make sure that we emit error state`() = runTest {
-        fakeUseCase.emit(Resource.Error(message = "Something went wrong", data = null))
-        assertNotNull((viewModel.uiState.value as PokemonViewModel.UiState.Error).message)
-        assertEquals((viewModel.uiState.value as PokemonViewModel.UiState.Error).message, "Something went wrong")
+        val result = MutableStateFlow<Resource<PokemonResponse>>(Resource.Error(message = "Something went wrong", data = null))
+        // GIVEN
+        coEvery {
+            useCase.fetch()
+        } returns result
+        // WHEN
+        viewModel.getPokemon()
+        //THEN
+        viewModel.uiState.test {
+            assert(viewModel.uiState.value is MainUiState.Error)
+            assertEquals(MainUiState.Error(message = "Something went wrong"), awaitItem())
+            assertEquals((viewModel.uiState.value as MainUiState.Error).message, "Something went wrong")
+        }
     }
 
 }
