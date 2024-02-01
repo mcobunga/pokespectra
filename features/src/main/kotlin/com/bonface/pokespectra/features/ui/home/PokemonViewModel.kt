@@ -28,7 +28,7 @@ class PokemonViewModel @Inject constructor(
 
     fun getPokemon() {
         viewModelScope.launch(dispatcher) {
-            pokemonUseCase.fetch().collect { result ->
+            pokemonUseCase.invoke().collect { result ->
                 when(result) {
                     is Resource.Success -> _uiState.value = MainUiState.Success(result.data)
                     is Resource.Error -> _uiState.value = MainUiState.Error(result.message.toString())

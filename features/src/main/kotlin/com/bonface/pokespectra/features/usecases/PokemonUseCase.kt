@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PokemonUseCase {
 
-    fun fetch(): Flow<Resource<PokemonResponse>>
+    suspend operator fun invoke(): Flow<Resource<PokemonResponse>>
 
 }

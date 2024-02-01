@@ -17,8 +17,9 @@ class PokemonDetailsUseCaseImpl @Inject constructor(
     private val repository: PokemonRepository
 ): PokemonDetailsUseCase {
 
-    override fun fetch(pokemonId: Int) = flow {
+    override suspend fun invoke(pokemonId: Int) = flow {
         try {
+            emit(Resource.Loading())
             flowOf(repository.getPokemonDetails(pokemonId))
                 .zip(flowOf(repository.getPokemonSpeciesDetails(pokemonId))) { pokemonDetails, pokemonSpecies ->
                     return@zip Pair<Response<DetailedPokedexResponse>, Response<PokemonSpeciesResponse>>(

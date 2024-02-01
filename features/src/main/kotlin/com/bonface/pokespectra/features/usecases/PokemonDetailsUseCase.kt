@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PokemonDetailsUseCase {
 
-    fun fetch(pokemonId: Int): Flow<Resource<PokedexDetails>>
+    suspend operator fun invoke(pokemonId: Int): Flow<Resource<PokedexDetails>>
 
 }
