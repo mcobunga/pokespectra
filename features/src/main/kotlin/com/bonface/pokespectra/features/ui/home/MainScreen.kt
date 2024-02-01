@@ -71,20 +71,14 @@ fun MainScreen(
                     val result = (uiState as MainUiState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
-                    if (result != null) {
-                        pokedexItems = result
-                    }
+                    if (result != null) pokedexItems = result
                     PokemonScreen(pokedexItems, navigateToPokemonDetails)
                 }
                 is MainUiState.Error -> {
                     val error = (uiState as MainUiState.Error).message
-                    RetrySection(error = error) {
-                        pokemonViewModel.getPokemon()
-                    }
+                    RetrySection(error = error) { pokemonViewModel.getPokemon() }
                 }
-                is MainUiState.Loading -> {
-                    Loading()
-                }
+                is MainUiState.Loading ->  Loading()
             }
         }
     }

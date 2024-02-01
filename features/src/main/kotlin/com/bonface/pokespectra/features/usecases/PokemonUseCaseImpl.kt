@@ -4,6 +4,7 @@ import com.bonface.pokespectra.features.utils.ErrorHandler.handleException
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
 import com.bonface.pokespectra.libs.repository.PokemonRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import javax.inject.Inject
@@ -12,7 +13,7 @@ class PokemonUseCaseImpl @Inject constructor(
     private val repository: PokemonRepository
 ): PokemonUseCase {
 
-    override fun fetch() = flow {
+    override suspend fun invoke() = flow {
         try {
             emit(Resource.Loading())
             val result = repository.getPokemon()

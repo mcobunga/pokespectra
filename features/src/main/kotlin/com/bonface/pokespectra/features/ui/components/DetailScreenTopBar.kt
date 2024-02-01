@@ -41,7 +41,7 @@ fun DetailScreenTopBar(onBackPress: () -> Unit) {
         navigationIcon = {
             val iconTintColor = if (topAppBarState.color != null && topAppBarState.color == lightOnPrimary) lightOutline else lightOnPrimary
             OutlinedButton(onClick = onBackPress,
-                modifier= Modifier.size(36.dp),
+                modifier= Modifier.size(32.dp),
                 shape = CircleShape,
                 border= BorderStroke(1.dp, iconTintColor),
                 contentPadding = PaddingValues(0.dp),
