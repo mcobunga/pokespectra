@@ -47,7 +47,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
         val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Loading())
         // GIVEN
         coEvery {
-            useCase.fetch(1)
+            useCase.invoke(1)
         } returns result
         // WHEN
         viewModel.getPokemonDetails(1)
@@ -63,7 +63,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
         val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Success(pokedexDetails()))
         // GIVEN
         coEvery {
-            useCase.fetch(1)
+            useCase.invoke(1)
         } returns result
         // WHEN
         viewModel.getPokemonDetails(1)
@@ -81,7 +81,7 @@ class PokemonDetailsViewModelTest: BaseTest() {
         val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Error(message = "Something went wrong", data = null))
         // GIVEN
         coEvery {
-            useCase.fetch(1)
+            useCase.invoke(1)
         } returns result
         // WHEN
         viewModel.getPokemonDetails(1)
