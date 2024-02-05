@@ -98,12 +98,12 @@ fun PokemonDetailsScreen(
 }
 
 @Composable
-fun TopBar(navController: NavHostController) {
+private fun TopBar(navController: NavHostController) {
     DetailScreenTopBar { navController.navigateUp() }
 }
 
 @Composable
-fun PokemonDetails(pokedexDetails: PokedexDetails, modifier: Modifier = Modifier) {
+private fun PokemonDetails(pokedexDetails: PokedexDetails, modifier: Modifier = Modifier) {
     val pokedexColor = getPrimaryColor(pokedexDetails.color)
     Column(
         modifier = modifier
@@ -134,7 +134,7 @@ fun PokemonDetails(pokedexDetails: PokedexDetails, modifier: Modifier = Modifier
 }
 
 @Composable
-fun PokemonImage(imageUrl: String, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
+private fun PokemonImage(imageUrl: String, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -149,7 +149,7 @@ fun PokemonImage(imageUrl: String, primaryColor: PrimaryColor, modifier: Modifie
 }
 
 @Composable
-fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifier) {
+private fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.about_pokemon, name.replaceFirstChar { it.titlecase() }),
@@ -165,7 +165,7 @@ fun PokemonAbout(name: String, description: String, modifier: Modifier = Modifie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
+private fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_abilities, name.replaceFirstChar { it.titlecase() }),
@@ -200,7 +200,7 @@ fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>>, prima
 }
 
 @Composable
-fun PokemonSize(weight: String, height: String, modifier: Modifier = Modifier) {
+private fun PokemonSize(weight: String, height: String, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -223,7 +223,7 @@ fun PokemonSize(weight: String, height: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
+private fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryColor: PrimaryColor, modifier: Modifier = Modifier) {
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_stats, name.replaceFirstChar { it.titlecase() }),

@@ -85,7 +85,7 @@ fun MainScreen(
 }
 
 @Composable
-fun PokemonScreen(pokedex: List<Pokedex>?, clickListener: (Int) -> Unit) {
+private fun PokemonScreen(pokedex: List<Pokedex>?, clickListener: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -98,7 +98,7 @@ fun PokemonScreen(pokedex: List<Pokedex>?, clickListener: (Int) -> Unit) {
 }
 
 @Composable
-fun SearchPokemon(
+private fun SearchPokemon(
     modifier: Modifier = Modifier,
     state: MutableState<TextFieldValue>,
     placeHolder: String
@@ -126,7 +126,7 @@ fun SearchPokemon(
 }
 
 @Composable
-fun PokemonList(
+private fun PokemonList(
     pokedex: List<Pokedex>?,
     navigateToDetails: (Int) -> Unit,
     searchedText: String
@@ -162,7 +162,7 @@ fun PokemonList(
 }
 
 @Composable
-fun PokemonCard(navigateToDetails: (Int) -> Unit, pokedex: Pokedex, modifier: Modifier = Modifier) {
+private fun PokemonCard(navigateToDetails: (Int) -> Unit, pokedex: Pokedex, modifier: Modifier = Modifier) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = colorScheme.surfaceVariant,
