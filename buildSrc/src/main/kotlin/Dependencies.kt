@@ -8,7 +8,7 @@ object Versions {
     const val firebaseCrashlytics = "18.6.0"
     const val firebaseAnalytics = "21.5.0"
     const val splash = "1.1.0-alpha02"
-    const val daggerHilt = "2.48.1"
+    const val daggerHilt = "2.50"
     const val okhttp = "5.0.0-alpha.2"
     const val loggingInterceptor = "5.0.0-alpha.6"
     const val moshi = "1.15.0"
