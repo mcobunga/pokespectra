@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.core))
     //Coroutines
     implementation(Dependencies.coroutineCore)
     implementation(Dependencies.coroutinesAndroid)
