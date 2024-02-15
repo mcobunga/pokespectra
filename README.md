@@ -47,7 +47,7 @@ This project has been implemented using a combination of tools and resources, so
 # Screenshots
 
 <p align="center">
-<img width="40%" alt="Screenshot 2023-12-21 at 16 57 53" src="https://github.com/mcobunga/pokespectra/assets/25502580/9495b945-02f5-4f7d-bc7f-e4270b20cc65" style="centre">
+<img width="40%" alt="Screenshot 2023-12-21 at 16 57 53" src="https://github.com/mcobunga/pokespectra/assets/25502580/2e9d3f5a-3012-41c9-88e9-340743a98eb0" style="centre">
 </p>
 
 
