@@ -16,4 +16,5 @@ object AppModule {
     fun provideErrorHandler(@ApplicationContext context: Context): ApiErrorHandler {
         return ApiErrorHandler(context)
     }
+
 }
