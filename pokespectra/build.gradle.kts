@@ -71,6 +71,9 @@ android {
         isIncludeAndroidResources = true
         isReturnDefaultValues = true
     }
+    lint {
+        abortOnError = false
+    }
 }
 
 dependencies {

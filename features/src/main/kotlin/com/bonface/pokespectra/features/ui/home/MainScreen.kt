@@ -1,9 +1,7 @@
 package com.bonface.pokespectra.features.ui.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +18,6 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -35,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bonface.pokespectra.core.lightScrim
+import com.bonface.pokespectra.core.fontFamily
 import com.bonface.pokespectra.features.R
 import com.bonface.pokespectra.features.ui.components.AppTopBar
 import com.bonface.pokespectra.features.ui.components.ErrorOrEmpty
@@ -64,7 +60,6 @@ fun MainScreen(
     pokemonViewModel: PokemonViewModel = hiltViewModel()
 ) {
     val uiState by pokemonViewModel.uiState.collectAsStateWithLifecycle()
-    var pokedexItems by remember { mutableStateOf(listOf<Pokedex>()) }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorScheme.background
@@ -79,8 +74,11 @@ fun MainScreen(
                     val result = (uiState as MainUiState.Success).pokemon?.results?.map {
                         it.toPokedex()
                     }
-                    if (result != null) pokedexItems = result
-                    PokemonScreen(pokedexItems, navigateToPokemonDetails)
+                    if (result != null) {
+                        PokemonScreen(result, navigateToPokemonDetails)
+                    } else {
+                        ErrorOrEmpty(errorMessage = stringResource(R.string.empty_pokemon))
+                    }
                 }
                 is MainUiState.Error -> {
                     val error = (uiState as MainUiState.Error).message
@@ -127,7 +125,7 @@ private fun SearchPokemon(
             )
         },
         placeholder = {
-            Text(text = placeHolder)
+            Text(text = placeHolder, fontFamily = fontFamily)
         },
         enabled = true
     )
@@ -160,8 +158,8 @@ private fun PokemonList(
                 ),
                 state = rememberLazyGridState(),
                 content = {
-                    items(filteredItems.size) { index ->
-                        PokemonCard(navigateToDetails, filteredItems[index])
+                    items(filteredItems.size) { item ->
+                        PokemonCard(navigateToDetails, filteredItems[item])
                     }
                 }
             )
@@ -220,6 +218,7 @@ private fun PokemonCard(
                 Text(
                     text = pokedex.name.replaceFirstChar { it.titlecase() },
                     style = TextStyle(color = Color.White, fontSize = 16.sp),
+                    fontFamily = fontFamily,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,

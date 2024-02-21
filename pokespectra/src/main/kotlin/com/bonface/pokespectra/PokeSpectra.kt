@@ -1,11 +1,11 @@
 package com.bonface.pokespectra
 
-import com.bonface.pokespectra.core.BaseApplication
+import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
-class PokeSpectra: BaseApplication() {
+class PokeSpectra: Application() {
 
     override fun onCreate() {
         super.onCreate()

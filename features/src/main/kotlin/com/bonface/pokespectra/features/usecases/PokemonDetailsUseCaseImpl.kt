@@ -1,6 +1,6 @@
 package com.bonface.pokespectra.features.usecases
 
-import com.bonface.pokespectra.features.utils.ErrorHandler.handleException
+import com.bonface.pokespectra.features.utils.ApiErrorHandler
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.DetailedPokedexResponse
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
@@ -14,7 +14,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class PokemonDetailsUseCaseImpl @Inject constructor(
-    private val repository: PokemonRepository
+    private val repository: PokemonRepository,
+    private val errorHandler: ApiErrorHandler
 ): PokemonDetailsUseCase {
 
     override suspend fun invoke(pokemonId: Int) = flow {
@@ -31,7 +32,7 @@ class PokemonDetailsUseCaseImpl @Inject constructor(
                 }
         } catch (e: Exception) {
             e.printStackTrace()
-            emit(Resource.Error(handleException(e).message.toString()))
+            emit(Resource.Error(errorHandler.handleException(e).message.toString()))
         }
     }
 

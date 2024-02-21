@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bonface.pokespectra.core.fontFamily
 import com.bonface.pokespectra.core.lightPrimary
 import com.bonface.pokespectra.core.lightScrim
 
@@ -42,7 +43,8 @@ fun AppTopBar(titleText: String) {
                             text = titleText,
                             color = lightScrim,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            fontFamily = fontFamily
                         )
                     }
                 }

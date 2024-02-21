@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bonface.pokespectra.core.fontFamily
 import com.bonface.pokespectra.core.lightOnPrimary
 import com.bonface.pokespectra.core.lightOutline
 import com.bonface.pokespectra.core.lightPrimary
@@ -72,6 +73,7 @@ fun DetailScreenTopBar(onBackPress: () -> Unit) {
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 text = title,
+                                fontFamily = fontFamily,
                                 color = if (topAppBarState.color != null && topAppBarState.color == lightOnPrimary) lightScrim else lightOnPrimary
                             )
                         }
