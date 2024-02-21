@@ -33,7 +33,7 @@ object TestCreationUtils {
         )
     }
 
-    fun getPokemonDetails(): DetailedPokedexResponse {
+    private fun getPokemonDetails(): DetailedPokedexResponse {
         return DetailedPokedexResponse(
             abilities = listOf(Ability(ability = AbilityDetails(name= "overgrow", url = "https://pokeapi.co/api/v2/ability/65/"), isHidden = false, slot = 1)),
             baseExperience = 64,
@@ -54,7 +54,7 @@ object TestCreationUtils {
         )
     }
 
-    fun getPokemonSpecies(): PokemonSpeciesResponse {
+    private fun getPokemonSpecies(): PokemonSpeciesResponse {
         return PokemonSpeciesResponse(
             color = SpeciesColor("green", "https://pokeapi.co/api/v2/pokemon-color/5/"),
             flavorTextEntries = listOf(

@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bonface.pokespectra.core.fontFamily
 import com.bonface.pokespectra.core.lightOnPrimary
 import com.bonface.pokespectra.core.lightOutline
 import com.bonface.pokespectra.core.lightOutlineVariant
@@ -50,6 +51,7 @@ import com.bonface.pokespectra.features.utils.PrimaryColor
 import com.bonface.pokespectra.features.utils.PrimaryColorExtensions.getPrimaryColor
 import com.bonface.pokespectra.features.utils.TopAppBarState
 import com.bonface.pokespectra.features.utils.TopAppBarStateProvider
+import com.bonface.pokespectra.features.utils.TopAppBarStateProvider.update
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
 
 @Composable
@@ -77,7 +79,7 @@ fun PokemonDetailsScreen(
                 is DetailsUiState.Success -> {
                     (uiState as DetailsUiState.Success).details.let { result ->
                         if (result != null) {
-                            TopAppBarStateProvider.update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
+                            update(TopAppBarState(title = result.name.replaceFirstChar { it.titlecase() }, color = getPrimaryColor(result.color).color.copy(alpha = .5F)))
                             PokemonDetails(result)
                         } else {
                             ErrorOrEmpty(errorMessage = stringResource(R.string.empty_pokemon))
@@ -153,12 +155,14 @@ private fun PokemonAbout(name: String, description: String, modifier: Modifier =
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.about_pokemon, name.replaceFirstChar { it.titlecase() }),
-        textDecoration = TextDecoration.Underline
+        textDecoration = TextDecoration.Underline,
+        fontFamily = fontFamily
     )
     Spacer(modifier = modifier.height(16.dp))
     Text(
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal, fontSize = 16.sp),
-        text = description
+        text = description,
+        fontFamily = fontFamily
     )
     Spacer(modifier = modifier.height(16.dp))
 }
@@ -169,7 +173,8 @@ private fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_abilities, name.replaceFirstChar { it.titlecase() }),
-        textDecoration = TextDecoration.Underline
+        textDecoration = TextDecoration.Underline,
+        fontFamily = fontFamily
     )
     Spacer(modifier = modifier.height(8.dp))
     Row(
@@ -180,7 +185,7 @@ private fun PokemonAbilities(name: String, abilities: List<Pair<String, Boolean>
             val selectedTextColor = if (primaryColor.color == lightOnPrimary) lightScrim else lightOnPrimary
             InputChip(
                 shape = RoundedCornerShape(12.dp),
-                label = { Text(style = MaterialTheme.typography.bodyMedium, text = it.first) },
+                label = { Text(style = MaterialTheme.typography.bodyMedium, text = it.first,  fontFamily = fontFamily) },
                 selected = it.second,
                 colors = InputChipDefaults.inputChipColors(
                     labelColor = lightScrim,
@@ -211,12 +216,14 @@ private fun PokemonSize(weight: String, height: String, modifier: Modifier = Mod
         Text(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
             modifier = modifier.weight(.5F),
-            text = stringResource(id = R.string.pokemon_weight, weight)
+            text = stringResource(id = R.string.pokemon_weight, weight),
+            fontFamily = fontFamily
         )
         Text(
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
             modifier = modifier.weight(.5F),
-            text = stringResource(id = R.string.pokemon_height, height)
+            text = stringResource(id = R.string.pokemon_height, height),
+            fontFamily = fontFamily
         )
     }
     Spacer(modifier = modifier.height(16.dp))
@@ -227,7 +234,8 @@ private fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryCo
     Text(
         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = lightScrim),
         text = stringResource(id = R.string.pokemon_stats, name.replaceFirstChar { it.titlecase() }),
-        textDecoration = TextDecoration.Underline
+        textDecoration = TextDecoration.Underline,
+        fontFamily = fontFamily
     )
     Spacer(modifier = modifier.height(8.dp))
     stats.forEach { stat ->
@@ -242,6 +250,7 @@ private fun PokemonStats(name: String, stats: List<Pair<String, Int>>, primaryCo
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal, fontSize = 16.sp),
                 modifier = modifier.weight(.5F),
                 text = stringResource(R.string.stat_value, stat.first.replaceFirstChar { it.titlecase() }, stat.second.toString()),
+                fontFamily = fontFamily
             )
             Box(
                 modifier = modifier.weight(.5F)

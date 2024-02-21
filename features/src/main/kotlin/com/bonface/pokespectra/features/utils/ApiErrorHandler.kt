@@ -1,8 +1,9 @@
 package com.bonface.pokespectra.features.utils
 
-import com.bonface.pokespectra.core.BaseApplication.Companion.getAppContext
+import android.content.Context
 import com.bonface.pokespectra.features.R
 import com.bonface.pokespectra.libs.data.model.MobileException
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
@@ -10,33 +11,34 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
 
-object ErrorHandler {
+class ApiErrorHandler @Inject constructor(@ApplicationContext private val context: Context) {
 
     @Throws(IOException::class)
     fun handleException(exception: Throwable): MobileException {
         exception.printStackTrace()
         return when (exception) {
             is UnknownHostException -> MobileException(
-                getAppContext().getString(R.string.no_internet_connection),
+                context.getString(R.string.no_internet_connection),
                 1000
             )
             is SocketTimeoutException -> MobileException(
-                getAppContext().getString(R.string.no_internet_connection),
+                context.getString(R.string.no_internet_connection),
                 3000
             )
             is SSLHandshakeException -> MobileException(
-                getAppContext().getString(R.string.app_update_needed),
+                context.getString(R.string.app_update_needed),
                 4000
             )
             is ConnectException -> MobileException(
-                getAppContext().getString(R.string.unable_to_connect),
+                context.getString(R.string.unable_to_connect),
                 5000
             )
             is HttpException -> getServerSideExceptions(exception)
             is IOException -> MobileException(
-                getAppContext().getString(
+                context.getString(
                     R.string.problem_processing_request
                 ), 2000
             )
@@ -52,9 +54,9 @@ object ErrorHandler {
             jsonObject?.getString("message")
         } catch (jsonException: JSONException) {
             when (e.code()) {
-                500 -> getAppContext().getString(R.string.internal_server_error)
-                503 -> getAppContext().getString(R.string.service_unavailable)
-                else -> getAppContext().getString(R.string.no_server_response)
+                500 -> context.getString(R.string.internal_server_error)
+                503 -> context.getString(R.string.service_unavailable)
+                else -> context.getString(R.string.no_server_response)
             }
         }
 
