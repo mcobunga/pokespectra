@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bonface.pokespectra.features.usecases.PokemonUseCase
 import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
-import com.bonface.pokespectra.libs.di.NetworkModule
+import com.bonface.pokespectra.libs.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
     private val pokemonUseCase: PokemonUseCase,
-    @NetworkModule.IODispatcher private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Loading)

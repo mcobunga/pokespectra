@@ -78,10 +78,11 @@ object NetworkModule {
     fun providesRepository(apiService: PokemonApiService) = PokemonRepository(apiService)
 
     @Provides
-    @IODispatcher
-    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    @Retention(AnnotationRetention.BINARY)
-    @Qualifier
-    annotation class IODispatcher
 }
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IoDispatcher
