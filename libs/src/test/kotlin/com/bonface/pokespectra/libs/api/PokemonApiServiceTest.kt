@@ -1,72 +1,65 @@
 package com.bonface.pokespectra.libs.api
 
-import com.bonface.pokespectra.libs.data.api.PokemonApiService
-import com.bonface.pokespectra.libs.dispatcher.PokeSpectraDispatcher
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.mockwebserver.MockWebServer
+import io.mockk.clearAllMocks
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
 
-open class PokemonApiServiceTest  {
+@OptIn(ExperimentalCoroutinesApi::class)
+@RunWith(MockitoJUnitRunner::class)
+class PokemonApiServiceTest : MockPokemonApiServiceTest() {
 
-    lateinit var pokemonApiService: PokemonApiService
-    private lateinit var loggingInterceptor: HttpLoggingInterceptor
-    private lateinit var okHttpClient: OkHttpClient
-    private lateinit var mockWebServer: MockWebServer
-
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
-    open fun before() {
-        mockWebServer()
-        setLoggingInterceptor()
-        setRetrofitWithMoshi()
+    override fun before() {
+        super.before()
+        Dispatchers.setMain(testDispatcher)
     }
 
     @After
-    open fun after() {
-        mockWebServer.shutdown()
+    override fun after() {
+        super.after()
+        clearAllMocks()
     }
 
-    private fun mockWebServer() {
-        mockWebServer = MockWebServer().apply {
-            dispatcher = PokeSpectraDispatcher()
-            start()
-        }
+    @Test
+    fun `should confirm fetching pokemon list from api source`() = runTest {
+        val response = pokemonApiService.getPokemon()
+        assertEquals(200, response.code())
+        assertEquals(response.body()?.count, 2)
+        assertEquals(response.body()?.results?.size, 2)
+        assertEquals(response.body()?.results?.firstOrNull()?.name, "bulbasaur")
+        assertEquals(response.body()?.results?.firstOrNull()?.url, "https://pokeapi.co/api/v2/pokemon/1/")
     }
 
-    private fun setLoggingInterceptor() {
-        loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        okHttpClient = buildOkhttpClient(loggingInterceptor)
+
+    @Test
+    fun `should confirm fetching selected pokemon details from api source`() = runTest {
+        val response = pokemonApiService.getPokemonDetails(1)
+        assertEquals(200, response.code())
+        assertEquals(response.body()?.name, "bulbasaur")
+        assertEquals(response.body()?.abilities?.firstOrNull()?.ability?.name, "overgrow")
+        assertEquals(response.body()?.weight, 69)
+        assertEquals(response.body()?.height, 7)
     }
 
-    private fun setRetrofitWithMoshi() {
-        pokemonApiService = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/").toString())
-            .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-            .create(PokemonApiService::class.java)
+    @Test
+    fun `should confirm fetching selected pokemon species details from api source`() = runTest {
+        val response = pokemonApiService.getPokemonSpeciesDetails(1)
+        assertEquals(200, response.code())
+        assertEquals(response.body()?.name, "bulbasaur")
+        assertEquals(response.body()?.color?.name, "green")
+        assertEquals(response.body()?.id, 1)
+        assertEquals(response.body()?.habitat?.name, "grassland")
     }
-
-    private fun buildOkhttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
-    }
-
-    private val moshi: Moshi = Moshi
-        .Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
 
 }

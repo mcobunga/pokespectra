@@ -4,7 +4,9 @@ import android.os.Environment
 import com.bonface.pokespectra.libs.data.api.PokemonApiService
 import com.bonface.pokespectra.libs.utils.Constants.BASE_URL
 import com.bonface.pokespectra.libs.BuildConfig
+import com.bonface.pokespectra.libs.domain.ApiErrorHandler
 import com.bonface.pokespectra.libs.repository.PokemonRepository
+import com.bonface.pokespectra.libs.repository.PokemonRepositoryImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -75,13 +77,14 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRepository(apiService: PokemonApiService) = PokemonRepository(apiService)
+    fun providesRepository(apiService: PokemonApiService, errorHandler: ApiErrorHandler) = PokemonRepositoryImpl(apiService, errorHandler)
 
     @Provides
-    @IODispatcher
-    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    @Retention(AnnotationRetention.BINARY)
-    @Qualifier
-    annotation class IODispatcher
 }
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IoDispatcher

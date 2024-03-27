@@ -50,7 +50,6 @@ import com.bonface.pokespectra.features.ui.components.RetrySection
 import com.bonface.pokespectra.features.utils.PrimaryColor
 import com.bonface.pokespectra.features.utils.PrimaryColorExtensions.getPrimaryColor
 import com.bonface.pokespectra.features.utils.TopAppBarState
-import com.bonface.pokespectra.features.utils.TopAppBarStateProvider
 import com.bonface.pokespectra.features.utils.TopAppBarStateProvider.update
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
 
