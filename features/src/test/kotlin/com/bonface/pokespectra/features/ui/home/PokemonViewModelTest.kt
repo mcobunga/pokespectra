@@ -2,8 +2,8 @@ package com.bonface.pokespectra.features.ui.home
 
 import app.cash.turbine.test
 import com.bonface.pokespectra.features.usecases.PokemonUseCase
-import com.bonface.pokespectra.features.utils.Resource
 import com.bonface.pokespectra.libs.data.model.PokemonResponse
+import com.bonface.pokespectra.libs.domain.Resource
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
 import com.bonface.pokespectra.utils.TestCreationUtils.getPokemon
@@ -78,7 +78,7 @@ class PokemonViewModelTest: BaseTest() {
 
     @Test
     fun `Given that getPokemon api call returns an error, make sure that we emit error state`() = runTest {
-        val result = MutableStateFlow<Resource<PokemonResponse>>(Resource.Error(message = "Something went wrong", data = null))
+        val result = MutableStateFlow<Resource<PokemonResponse>>(Resource.Error(message = "Something went wrong"))
         // GIVEN
         coEvery {
             useCase.invoke()

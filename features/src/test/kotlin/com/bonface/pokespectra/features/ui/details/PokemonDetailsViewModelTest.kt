@@ -2,14 +2,21 @@ package com.bonface.pokespectra.features.ui.details
 
 import app.cash.turbine.test
 import com.bonface.pokespectra.features.usecases.PokemonDetailsUseCase
-import com.bonface.pokespectra.features.utils.Resource
+import com.bonface.pokespectra.features.usecases.PokemonSpeciesUseCase
+import com.bonface.pokespectra.libs.data.model.DetailedPokedexResponse
 import com.bonface.pokespectra.libs.data.model.PokedexDetails
+import com.bonface.pokespectra.libs.data.model.PokemonSpeciesResponse
+import com.bonface.pokespectra.libs.domain.Resource
 import com.bonface.pokespectra.utils.BaseTest
 import com.bonface.pokespectra.utils.MainDispatcherRule
+import com.bonface.pokespectra.utils.TestCreationUtils
+import com.bonface.pokespectra.utils.TestCreationUtils.getPokemonDetails
+import com.bonface.pokespectra.utils.TestCreationUtils.getPokemonSpecies
 import com.bonface.pokespectra.utils.TestCreationUtils.pokedexDetails
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -18,7 +25,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
+import java.time.Duration
+import java.time.OffsetDateTime
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -29,12 +40,13 @@ class PokemonDetailsViewModelTest: BaseTest() {
     private val dispatcher = UnconfinedTestDispatcher()
 
     private lateinit var viewModel: PokemonDetailsViewModel
-    private val useCase = mockk<PokemonDetailsUseCase>(relaxed = true)
+    private val pokemonDetailsUseCase = mockk<PokemonDetailsUseCase>(relaxed = true)
+    private val pokemonSpeciesUseCase = mockk<PokemonSpeciesUseCase>(relaxed = true)
 
     @Before
     override fun setup() {
         super.setup()
-        viewModel = PokemonDetailsViewModel(useCase, dispatcher)
+        viewModel = PokemonDetailsViewModel(pokemonDetailsUseCase, pokemonSpeciesUseCase, dispatcher)
     }
 
     @After
@@ -44,10 +56,10 @@ class PokemonDetailsViewModelTest: BaseTest() {
 
     @Test
     fun `Given that viewmodel getPokemonDetails has been initiated, make sure that we show a loading state`() = runTest(dispatcher) {
-        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Loading())
+        val result = MutableStateFlow<Resource<DetailedPokedexResponse>>(Resource.Loading())
         // GIVEN
         coEvery {
-            useCase.invoke(1)
+            pokemonDetailsUseCase.invoke(1)
         } returns result
         // WHEN
         viewModel.getPokemonDetails(1)
@@ -60,11 +72,16 @@ class PokemonDetailsViewModelTest: BaseTest() {
 
     @Test
     fun `Given that getPokemonDetails api call return success, make sure that we show a success state`() = runTest {
-        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Success(pokedexDetails()))
+        val detailsResult = Resource.Success(getPokemonDetails())
+        val speciesResult = Resource.Success(getPokemonSpecies())
+
         // GIVEN
         coEvery {
-            useCase.invoke(1)
-        } returns result
+            pokemonDetailsUseCase.invoke(1)
+        } returns flowOf(detailsResult)
+        coEvery {
+            pokemonSpeciesUseCase.invoke(1)
+        } returns flowOf(speciesResult)
         // WHEN
         viewModel.getPokemonDetails(1)
         //THEN
@@ -78,10 +95,10 @@ class PokemonDetailsViewModelTest: BaseTest() {
 
     @Test
     fun `Given that getPokemon api call returns an error, make sure that we emit error state`() = runTest {
-        val result = MutableStateFlow<Resource<PokedexDetails>>(Resource.Error(message = "Something went wrong", data = null))
+        val result = MutableStateFlow<Resource<DetailedPokedexResponse>>(Resource.Error(message = "Something went wrong"))
         // GIVEN
         coEvery {
-            useCase.invoke(1)
+            pokemonDetailsUseCase.invoke(1)
         } returns result
         // WHEN
         viewModel.getPokemonDetails(1)
